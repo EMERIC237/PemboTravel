@@ -1,20 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import AppNavigator from "./navigation/AppNavigator";
+import { Provider } from "react-redux";
+import store from "./store";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    //*the screen wont display if it wrapped in a view without the flex = 1 !
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
