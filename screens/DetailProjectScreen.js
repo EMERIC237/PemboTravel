@@ -24,7 +24,13 @@ const DetailProjectScreen = ({ route, navigation }) => {
         <Text style={styles.text}>{selectedProject.description}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Subscribe" color={Colors.primary} />
+        <Button
+          title="Subscribe"
+          color={Colors.primary}
+          onPress={() => {
+            navigation.navigate("Subscribe");
+          }}
+        />
       </View>
     </View>
   );

@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProjectsScreen from "../screens/ProjectsScreen";
 import DetailProjectScreen from "../screens/DetailProjectScreen";
+import SubscriptionScreen from "../screens/SubscriptionScreen";
 
 const MyStack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const AppNavigator = () => {
           options={{ title: "All our projects" }}
         />
         <MyStack.Screen name="Details" component={DetailProjectScreen} />
+        <MyStack.Screen name="Subscribe" component={SubscriptionScreen} />
       </MyStack.Navigator>
     </NavigationContainer>
   );

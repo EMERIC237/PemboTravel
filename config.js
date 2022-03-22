@@ -7,7 +7,7 @@ import {
   appId,
   measurementId,
 } from "@env";
-
+console.log("apiKey: ", apiKey);
 export default {
   apiKey,
   authDomain,
