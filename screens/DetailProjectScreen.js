@@ -36,7 +36,9 @@ const DetailProjectScreen = ({ route, navigation }) => {
   );
 };
 
+
 export default DetailProjectScreen;
+
 
 const styles = StyleSheet.create({
   screen: {

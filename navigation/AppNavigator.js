@@ -4,19 +4,37 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProjectsScreen from "../screens/ProjectsScreen";
 import DetailProjectScreen from "../screens/DetailProjectScreen";
 import SubscriptionScreen from "../screens/SubscriptionScreen";
+import SplashScreen from "../screens/SplashScreen";
+import AuthScreen from "../screens/AuthScreen";
 
 const MyStack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <MyStack.Navigator initialRouteName="Projects">
+      <MyStack.Navigator initialRouteName="Splash">
+        <MyStack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+        <MyStack.Screen
+          name="Auth"
+          component={AuthScreen}
+          options={{ headerTitle: "Authenticate" }}
+        />
         <MyStack.Screen
           name="Projects"
           component={ProjectsScreen}
           options={{ title: "All our projects" }}
         />
-        <MyStack.Screen name="Details" component={DetailProjectScreen} />
+        <MyStack.Screen
+          name="Details"
+          component={DetailProjectScreen}
+          options={({ route }) => ({
+            title: route.params.projectName,
+          })}
+        />
         <MyStack.Screen name="Subscribe" component={SubscriptionScreen} />
       </MyStack.Navigator>
     </NavigationContainer>

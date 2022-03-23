@@ -6,20 +6,39 @@ import {
   ImageBackground,
   TouchableOpacity,
   SafeAreaView,
+  Button,
 } from "react-native";
-import { useSelector } from "react-redux";
-import { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useCallback, useLayoutEffect } from "react";
 
 import React from "react";
+import { logout } from "../store/actions/authActions";
 
 const ProjectsScreen = ({ navigation }) => {
   const allProjects = useSelector((state) => state.projects.projects);
+  const dispacth = useDispatch();
+  const onLogoutHandler = () => {
+    dispacth(logout());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Auth" }],
+    });
+  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <Button onPress={onLogoutHandler} title="Logout" />,
+    });
+  }, [navigation]);
+
   const renderGridItem = useCallback((data) => {
     return (
       <TouchableOpacity
         style={styles.projectItem}
         onPress={() => {
-          navigation.navigate("Details", { projectId: data.item.id });
+          navigation.navigate("Details", {
+            projectId: data.item.id,
+            projectName: data.item.city,
+          });
         }}
       >
         <ImageBackground

@@ -10,10 +10,8 @@ import {
   Keyboard,
   Button,
 } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useReducer, useCallback } from "react";
-import { auth } from "../firebase";
 import Input from "../components/UI/Input";
 const FORM_UPDATE = "FORM_UPDATE";
 const formReducer = (state, action) => {
@@ -66,16 +64,6 @@ const SubscriptionScreen = (props) => {
         { text: "Okay" },
       ]);
       return;
-    }
-    try {
-      const user = await createUserWithEmailAndPassword(
-        auth,
-        formState.inputValues.email,
-        formState.inputValues.password
-      );
-      props.navigation.goBack();
-    } catch (error) {
-      console.log(error.message);
     }
   });
   const inputChangeHandler = useCallback(
