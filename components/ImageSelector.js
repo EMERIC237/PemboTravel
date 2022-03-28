@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import { Camera } from "expo-camera";
+import { Camera, takePic } from "expo-camera";
 import { Ionicons } from "@expo/vector-icons";
 
 const ImageSelector = (props) => {
-  const [pickedImage, setPickedImage] = useState();
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const camera = useRef();
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -14,25 +15,109 @@ const ImageSelector = (props) => {
     })();
   }, []);
   if (hasPermission === null) {
-    return <View />;
+    return <View></View>;
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
-  // const camera = useRef(camera);
+
+  const snap = async () => {
+    if (camera) {
+      let photo = await camera.current.takePictureAsync();
+      props.navigation.push("Payment", {
+        imageUri: photo.uri,
+        amount: props.amount,
+      });
+    }
+  };
+
   return (
-    <Camera
-      style={styles.camera}
-      // ref={(r) => {
-      //   camera = r;
-      // }}
-    >
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.captureButton}>
-          <Ionicons name="camera" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-    </Camera>
+    <View style={{ flex: 1, width: "100%" }}>
+      <Camera type={type} style={{ flex: 1 }} ref={camera}>
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            backgroundColor: "transparent",
+            flexDirection: "row",
+          }}
+        >
+          <View
+            style={{
+              position: "absolute",
+              left: "5%",
+              top: "10%",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                backgroundColor: "#000",
+                borderRadius: "50%",
+                height: 25,
+                width: 25,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                }}
+              >
+                ⚡️
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                borderRadius: "50%",
+                height: 25,
+                width: 25,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                }}
+              >
+                {type === "front" ? "🤳" : "📷"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              flexDirection: "row",
+              flex: 1,
+              width: "100%",
+              padding: 20,
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{
+                alignSelf: "center",
+                flex: 1,
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity
+                onPress={snap}
+                style={{
+                  width: 70,
+                  height: 70,
+                  bottom: 0,
+                  borderRadius: 50,
+                  backgroundColor: "#fff",
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Camera>
+    </View>
   );
 };
 

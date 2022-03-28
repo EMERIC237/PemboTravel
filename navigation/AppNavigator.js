@@ -7,6 +7,7 @@ import SubscriptionScreen from "../screens/SubscriptionScreen";
 import SplashScreen from "../screens/SplashScreen";
 import AuthScreen from "../screens/AuthScreen";
 import PaymentScreen from "../screens/PaymentScreen";
+import DetailContributionScreen from "../screens/DetailContributionScreen";
 
 const MyStack = createNativeStackNavigator();
 
@@ -36,9 +37,14 @@ const AppNavigator = () => {
             title: route.params.projectName,
           })}
         />
-         <MyStack.Screen
+        <MyStack.Screen
           name="Payment"
           component={PaymentScreen}
+          initialParams={{ imageUri: null, amount: "" }}
+        />
+        <MyStack.Screen
+          name="DetailContribution"
+          component={DetailContributionScreen}
         />
         <MyStack.Screen name="Subscribe" component={SubscriptionScreen} />
       </MyStack.Navigator>

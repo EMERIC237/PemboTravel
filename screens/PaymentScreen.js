@@ -6,32 +6,39 @@ import {
   View,
   ScrollView,
   Button,
+  Image,
 } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import Colors from "../constants/Colors";
 import { useDispatch } from "react-redux";
+import { addPayment } from "../store/actions/paymentActions";
 
-const PaymentScreen = () => {
-  const [titleValue, setTitleValue] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+const PaymentScreen = ({ route, navigation }) => {
+  //get the amount value sent previously when calling the imageSelector and set it as a default state
+  const { amount: prevAmount, imageUri } = route.params;
+  const [amount, setAmount] = useState(prevAmount);
   const [ontakenImage, setOnTakenImage] = useState(false);
+  console.log("line 20:", route.params);
+  const amountRef = useRef();
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    amountRef.current = amount;
+  }, [amount]);
+
   const titleChangeHandler = (text) => {
-    setTitleValue(text);
+    setAmount(text);
   };
 
-  const savePlaceHandler = () => {
-    dispatch(addPlace(titleValue, selectedImage));
-    props.navigation.goBack();
+  const savePaymentHandler = () => {
+    dispatch(addPayment(imageUri, amount));
+    navigation.navigate("DetailContribution");
   };
 
-  const imageTakenHandler = (imagePath) => {
-    setSelectedImage(imagePath);
-  };
   if (ontakenImage) {
-    return <ImageSelector />;
+    //set the amount value as a props so we can get it in the next render
+    return <ImageSelector navigation={navigation} amount={amount} />;
   }
   return (
     <ScrollView>
@@ -41,20 +48,42 @@ const PaymentScreen = () => {
           placeholder="enter amount here"
           style={styles.textInput}
           onChangeText={titleChangeHandler}
-          value={titleValue}
+          value={amount}
         />
-        <Button
-          title="Take the picture"
-          onPress={() => {
-            setOnTakenImage((ontakenImage) => !ontakenImage);
-          }}
-        />
+        {imageUri && (
+          <View style={styles.imageContainer}>
+            {/* <Image
+              source={{
+                uri: imageUri,
+              }}
+              style={styles.image}
+            /> */}
+            {/*image use for demonstration*/}
+            <Image
+              source={{
+                uri: "https://cdn.britannica.com/22/187022-138-64E249E2/facts-paper-money.jpg?w=800&h=450&c=crop",
+              }}
+              style={styles.image}
+            />
+          </View>
+        )}
+        <View style={styles.buttonContainer}>
+          <Button
+            title={imageUri ? "Take new picture" : "Take picture"}
+            onPress={() => {
+              setOnTakenImage((ontakenImage) => !ontakenImage);
+            }}
+            disabled={!amount && !imageUri}
+            style={styles.takePictureButton}
+          />
 
-        <Button
-          title="Save payment"
-          color={Colors.primary}
-          onPress={savePlaceHandler}
-        />
+          <Button
+            title="Save payment"
+            color={Colors.primary}
+            onPress={savePaymentHandler}
+            style={styles.saveButton}
+          />
+        </View>
       </View>
     </ScrollView>
   );
@@ -76,5 +105,31 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingVertical: 4,
     paddingHorizontal: 2,
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingRight: 10,
+    width: 350,
+    height: 200,
+    borderRadius: 5,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  buttonContainer: {
+    marginTop: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  takePictureButton: {
+    marginBottom: 10,
+  },
+  saveButton: {
+    fontSize: 80,
+    fontWeight: "500",
   },
 });
