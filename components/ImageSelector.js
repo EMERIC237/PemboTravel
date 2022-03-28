@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
-import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
 import { Camera } from "expo-camera";
+import { Ionicons } from "@expo/vector-icons";
 
 const ImageSelector = (props) => {
   const [pickedImage, setPickedImage] = useState();
@@ -18,59 +19,43 @@ const ImageSelector = (props) => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  // const camera = useRef(camera);
   return (
-    <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}
-          >
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
-    </View>
+    <Camera
+      style={styles.camera}
+      // ref={(r) => {
+      //   camera = r;
+      // }}
+    >
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.captureButton}>
+          <Ionicons name="camera" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+    </Camera>
   );
 };
 
 export default ImageSelector;
 
 const styles = StyleSheet.create({
-  imagepicker: {
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  imagePreview: {
-    width: "100%",
-    height: 200,
-    marginBottom: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "#ccc",
-    borderWidth: 1,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
   container: {
     flex: 1,
   },
   camera: {
     flex: 1,
+    width: "100%",
+  },
+  captureButton: {
+    height: 80,
+    width: 80,
   },
   buttonContainer: {
     flex: 1,
     backgroundColor: "transparent",
     flexDirection: "row",
     margin: 20,
+    width: "100%",
   },
   button: {
     flex: 0.1,

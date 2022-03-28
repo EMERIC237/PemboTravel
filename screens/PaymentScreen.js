@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 const PaymentScreen = () => {
   const [titleValue, setTitleValue] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
+  const [ontakenImage, setOnTakenImage] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -29,16 +30,26 @@ const PaymentScreen = () => {
   const imageTakenHandler = (imagePath) => {
     setSelectedImage(imagePath);
   };
+  if (ontakenImage) {
+    return <ImageSelector />;
+  }
   return (
     <ScrollView>
       <View style={styles.form}>
-        <Text style={styles.label}>Amount</Text>
+        <Text style={styles.label}>Amount:</Text>
         <TextInput
+          placeholder="enter amount here"
           style={styles.textInput}
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
-        <ImageSelector onImageTaken={imageTakenHandler} />
+        <Button
+          title="Take the picture"
+          onPress={() => {
+            setOnTakenImage((ontakenImage) => !ontakenImage);
+          }}
+        />
+
         <Button
           title="Save payment"
           color={Colors.primary}
