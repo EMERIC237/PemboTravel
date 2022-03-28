@@ -13,6 +13,7 @@ import {
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useReducer, useCallback } from "react";
 import Input from "../components/UI/Input";
+import { signup } from "../store/actions/authActions";
 const FORM_UPDATE = "FORM_UPDATE";
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
@@ -65,6 +66,16 @@ const SubscriptionScreen = (props) => {
       ]);
       return;
     }
+    dispatch(
+      signup(
+        formState.inputValues.email,
+        formState.inputValues.password,
+        formState.inputValues.nom,
+        formState.inputValues.prenom,
+        formState.inputValues.phoneNumber
+      )
+    );
+    props.navigation.navigate("Projects");
   });
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {

@@ -66,10 +66,13 @@ const AuthScreen = (props) => {
 
   const authHandler = async (mode) => {
     if (mode === "google") {
-      await dispatch(googleSignUp());
+      // await dispatch(googleSignUp());
       props.navigation.navigate("Projects");
     }
     let action;
+    console.log({ formState });
+    console.log("email: ", formState.inputValues.email);
+    console.log("pass:", formState.inputValues.password);
     if (isSignedUp) {
       action = login(
         formState.inputValues.email,
@@ -111,7 +114,12 @@ const AuthScreen = (props) => {
     } else {
       return (
         <View>
-          <Button title="Sign Up with email" onPress={authHandler} />
+          <Button
+            title="Sign Up with email"
+            onPress={() => {
+              props.navigation.navigate("Subscribe");
+            }}
+          />
           <Button
             title="Sign Up with Google"
             onPress={authHandler.bind(this, "google")}

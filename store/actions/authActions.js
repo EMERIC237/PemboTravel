@@ -1,17 +1,12 @@
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { iosClientId, androidClientId } from "@env";
-import { useIdTokenAuthRequest } from "expo-auth-session/providers";
-import { Constants } from "expo-constants";
 import { maybeCompleteAuthSession } from "expo-web-browser";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signOut,
-  signInWithCredential,
 } from "firebase/auth";
-import { async } from "@firebase/util";
 export const AUTHENTICATE = "ATHENTICATE";
 /**
  *
@@ -30,12 +25,19 @@ export const signup = (email, password, nom, prenom, phoneNumber) => {
         email,
         password
       );
-      await setDoc(doc(db, "users", userCredentials.user.uid), {
-        nom,
-        prenom,
-        phoneNumber,
-      });
-      console.log(user);
+      console.log({ nom });
+      console.log({ prenom });
+      console.log({ phoneNumber });
+      const response = await setDoc(
+        doc(db, "users", userCredentials.user.uid),
+        {
+          nom,
+          prenom,
+          phoneNumber,
+        }
+      );
+      console.log({ response });
+      console.log({ userCredentials });
     } catch (error) {
       let errorCode = error.code;
       let errorMsg = error.message;
@@ -52,6 +54,8 @@ export const signup = (email, password, nom, prenom, phoneNumber) => {
 };
 
 export const login = (email, password) => {
+  console.log({ email });
+  console.log({ password });
   return async (dispacth) => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
@@ -106,41 +110,4 @@ export const logout = () => {
 //       throw new Error(error.message);
 //     }
 //   };
-// };
-
-maybeCompleteAuthSession();
-function login(id_token) {
-  console.log("Sign in with google..", { id_token });
-  try {
-    const credential = GoogleAuthProvider.credential(id_token);
-    return credential;
-  } catch (error) {
-    throw error;
-  }
-}
-export default function useGoogleAuthentication() {
-  var _a, _b;
-  const [request, _, promptAsync] = useIdTokenAuthRequest(
-    Object.assign(
-      {},
-      (_b =
-        (_a = Constants.manifest) === null || _a === void 0
-          ? void 0
-          : _a.extra) === null || _b === void 0
-        ? void 0
-        : _b.google
-    )
-  );
-  async function prompt() {
-    const response = await promptAsync();
-    if (
-      (response === null || response === void 0 ? void 0 : response.type) !==
-      "success"
-    ) {
-      throw new Error(response.type);
-    }
-    const credential = login(response.params.id_token);
-    return [credential];
-  }
-  return [!!request, prompt];
-}
+//
