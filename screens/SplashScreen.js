@@ -12,7 +12,6 @@ const SplashScreen = ({ navigation }) => {
   function NavigatetoAuth() {
     setTimeout(() => {
       onAuthStateChanged(auth, (user) => {
-        console.log({ user });
         if (user) {
           console.log("login case");
           navigation.reset({
@@ -22,7 +21,7 @@ const SplashScreen = ({ navigation }) => {
         } else {
           navigation.reset({
             index: 0,
-            routes: [{ name: "Auth" }],
+            routes: [{ name: "Projects" }],
           });
         }
       });

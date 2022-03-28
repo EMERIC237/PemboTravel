@@ -1,13 +1,14 @@
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { maybeCompleteAuthSession } from "expo-web-browser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
 export const AUTHENTICATE = "ATHENTICATE";
+export const LOGOUT = "LOGOUT";
+let timer;
 /**
  *
  * @param {string} email
@@ -25,9 +26,6 @@ export const signup = (email, password, nom, prenom, phoneNumber) => {
         email,
         password
       );
-      console.log({ nom });
-      console.log({ prenom });
-      console.log({ phoneNumber });
       const response = await setDoc(
         doc(db, "users", userCredentials.user.uid),
         {
@@ -54,18 +52,35 @@ export const signup = (email, password, nom, prenom, phoneNumber) => {
 };
 
 export const login = (email, password) => {
-  console.log({ email });
-  console.log({ password });
   return async (dispacth) => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // dispacth(
+      //   authenticate(
+      //     userCredentials.localId,
+      //     userCredentials.idToken,
+      //     parseInt(userCredentials.expiresIn) * 1000
+      //   )
+      // );
+      // const onExpiration = new Date(
+      //   new Date().getTime() + parseInt(userCredentials.expiresIn) * 1000
+      // );
+      // saveDataToStorage(
+      //   userCredentials.idToken,
+      //   userCredentials.localId,
+      //   onExpiration
+      // );
     } catch (error) {
       let errorCode = error.code;
       let errorMsg = error.message;
       let message = "Something went wrong!";
-      if (errorCode == "auth/weak-password") {
-        message = "The password is too weak.";
+      if (errorCode == "auth/wrong-password") {
+        message = "The password is wrong.";
       } else {
         message = errorMsg;
       }
@@ -75,14 +90,65 @@ export const login = (email, password) => {
   };
 };
 
-export const logout = () => {
-  return async (dispatch) => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+/**
+ * This function is use to authenticate(sign in on sign up )on the device
+ * The function will dispatch to action : the setLogoutTimer which will set a timer
+ * to expire the token after the expire date is passed
+ * @param {string} userId
+ * @param {string} token
+ * @returns an action object that will be used on the reducer function
+ */
+export const authenticate = (userId, token, expiryTime) => {
+  return (dispatch) => {
+    dispatch(setLogoutTimer(expiryTime));
+    dispatch({ type: AUTHENTICATE, payload: { userId, token } });
   };
+};
+
+/**
+ *  function to save the token on the device
+ * @param {string} token
+ * @param {string} userId
+ * @param {date object} onExpiration
+ * @implements AsyncStorage
+ */
+const saveDataToStorage = async (token, userId, onExpiration) => {
+  try {
+    await AsyncStorage.setItem(
+      "userData",
+      JSON.stringify({
+        token,
+        userId,
+        expiryDate: onExpiration.toISOString(),
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+/**
+ *
+ * This function is use to setup a timer for the token
+ * @param {date object} expirationTime
+ * @returns a dispacth funtion
+ */
+const setLogoutTimer = (expirationTime) => {
+  return (dispatch) => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
+  };
+};
+
+export const logout = () => {
+  clearLogoutTimer();
+  AsyncStorage.removeItem("userData");
+  return { type: LOGOUT };
 };
 /**
  * Google Authentication
