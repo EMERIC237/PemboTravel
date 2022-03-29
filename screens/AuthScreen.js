@@ -70,9 +70,6 @@ const AuthScreen = (props) => {
       props.navigation.navigate("Projects");
     }
     let action;
-    console.log({ formState });
-    console.log("email: ", formState.inputValues.email);
-    console.log("pass:", formState.inputValues.password);
     if (isSignedUp) {
       action = login(
         formState.inputValues.email,

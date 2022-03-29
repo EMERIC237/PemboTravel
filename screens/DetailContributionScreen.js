@@ -13,7 +13,6 @@ import React, { useCallback } from "react";
 
 const DetailContributionScreen = ({ navigation }) => {
   const payments = useSelector((state) => state.payment.payments);
-  console.log("payments:", payments);
   const renderGridItem = useCallback((data) => {
     return (
       <View style={styles.contributionContainer}>

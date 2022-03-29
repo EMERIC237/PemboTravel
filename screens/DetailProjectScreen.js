@@ -28,7 +28,7 @@ const DetailProjectScreen = ({ route, navigation }) => {
           title="Subscribe"
           color={Colors.primary}
           onPress={() => {
-            navigation.navigate("Subscribe");
+            navigation.navigate("Subscribe", { projectId });
           }}
         />
       </View>
@@ -36,9 +36,7 @@ const DetailProjectScreen = ({ route, navigation }) => {
   );
 };
 
-
 export default DetailProjectScreen;
-
 
 const styles = StyleSheet.create({
   screen: {

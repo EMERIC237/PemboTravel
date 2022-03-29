@@ -18,7 +18,6 @@ const PaymentScreen = ({ route, navigation }) => {
   const { amount: prevAmount, imageUri } = route.params;
   const [amount, setAmount] = useState(prevAmount);
   const [ontakenImage, setOnTakenImage] = useState(false);
-  console.log("line 20:", route.params);
   const amountRef = useRef();
 
   const dispatch = useDispatch();

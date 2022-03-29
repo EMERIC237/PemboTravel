@@ -2,64 +2,69 @@ import {
   StyleSheet,
   Text,
   View,
+  FlatList,
+  ImageBackground,
   TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
+  SafeAreaView,
+  Button,
 } from "react-native";
-import { ScreenContainer } from "react-native-screens";
-import React from "react";
-
-const ProjectsGridTile = (props) => {
-    let TouchableCmp = TouchableOpacity;
-    if (Platform.OS === "android" && Platform.Version >= 21) {
-      TouchableCmp = TouchableNativeFeedback;
-    }
+import { useCallback } from "react";
+const ProjectsGridTile = ({ dataList, navigation }) => {
+  const renderGridItem = useCallback((data) => {
     return (
-      <View style={styles.gridItem}>
-        <TouchableCmp style={{ flex: 1 }} onPress={props.onSelect}>
-          <View
-            style={{
-              ...styles.container,
-              ...{ backgroundColor: props.color },
-            }}
-          >
-            <Text style={styles.title} numberOfLines={2}>
-              {props.title}
-            </Text>
-          </View>
-        </TouchableCmp>
-      </View>
+      <TouchableOpacity
+        style={styles.projectItem}
+        onPress={() => {
+          navigation.navigate("Details", {
+            projectId: data.item.id,
+            projectName: data.item.city,
+          });
+        }}
+      >
+        <ImageBackground
+          imageStyle={{ borderRadius: 6 }}
+          source={{ uri: data.item.imageUrl }}
+          style={styles.image}
+        >
+          <Text style={styles.cityText}> {data.item.city}</Text>
+        </ImageBackground>
+      </TouchableOpacity>
     );
-  };
+  }, []);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={dataList}
+        renderItem={renderGridItem}
+        keyExtractor={(item) => item.id}
+      />
+    </SafeAreaView>
+  );
+};
 
 export default ProjectsGridTile;
 
 const styles = StyleSheet.create({
-    gridItem: {
-      flex: 1,
-      margin: 15,
-      height: 150,
-      borderRadius: 10,
-      overflow:
-        Platform.OS === "android" && Platform.Version >= 21
-          ? "hidden"
-          : "visible",
-      elevation: 5,
-    },
-    container: {
-      flex: 1,
-      borderRadius: 10,
-      shadowColor: "black",
-      shadowOpacity: 0.26,
-      shadowOffset: { width: 0, height: 2 },
-      shadowRadius: 10,
-      padding: 15,
-      justifyContent: "flex-end",
-      alignItems: "flex-end",
-    },
-    title: {
-      fontFamily: "open-sans-bold",
-      fontSize: 22,
-      textAlign: "right",
-    },
-  });
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  projectItem: {
+    padding: 15,
+  },
+  image: {
+    width: 300,
+    height: 100,
+    justifyContent: "center",
+    borderRadius: 5,
+  },
+  cityText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "rgba(223, 230, 239, 0.25)",
+  },
+});

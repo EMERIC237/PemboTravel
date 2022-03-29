@@ -18,7 +18,14 @@ let timer;
  * @param {string} phoneNumber
  * @returns a dispatch funcyion that will be called by the redux thun and return an action object
  */
-export const signup = (email, password, nom, prenom, phoneNumber) => {
+export const signup = (
+  email,
+  password,
+  nom,
+  prenom,
+  phoneNumber,
+  projectId
+) => {
   return async (dispacth) => {
     try {
       const userCredentials = await createUserWithEmailAndPassword(
@@ -34,8 +41,6 @@ export const signup = (email, password, nom, prenom, phoneNumber) => {
           phoneNumber,
         }
       );
-      console.log({ response });
-      console.log({ userCredentials });
     } catch (error) {
       let errorCode = error.code;
       let errorMsg = error.message;

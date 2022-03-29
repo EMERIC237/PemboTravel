@@ -39,8 +39,9 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const SubscriptionScreen = (props) => {
+const SubscriptionScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
+  const { projectId } = route.params;
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       prenom: "",
@@ -59,7 +60,6 @@ const SubscriptionScreen = (props) => {
     formIsValid: false,
   });
   const submitHandler = useCallback(async () => {
-    console.log(formState);
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the erros in the form.", [
         { text: "Okay" },
@@ -72,10 +72,11 @@ const SubscriptionScreen = (props) => {
         formState.inputValues.password,
         formState.inputValues.nom,
         formState.inputValues.prenom,
-        formState.inputValues.phoneNumber
+        formState.inputValues.phoneNumber,
+        projectId
       )
     );
-    props.navigation.navigate("Projects");
+    navigation.navigate("Projects");
   });
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {

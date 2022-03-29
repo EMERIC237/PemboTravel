@@ -26,12 +26,12 @@ const ProjectsScreen = ({ navigation }) => {
   };
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <Button onPress={onLogoutHandler} title="Logout" />,
+      // headerLeft: () => <Button onPress={onLogoutHandler} title="Logout" />,
       headerRight: () => (
         <Button
-          title="payment"
+          title="My Projects"
           onPress={() => {
-            navigation.navigate("Payment");
+            navigation.navigate("userProjects");
           }}
         />
       ),
