@@ -5,7 +5,12 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  switch (action) {
+  switch (action.type) {
+    case "CREATE_PROJECT":
+      return {
+        ...state,
+        projects: [...state.projects, action.payload],
+      };
     default:
       return state;
   }

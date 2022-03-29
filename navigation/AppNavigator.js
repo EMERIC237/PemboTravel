@@ -99,6 +99,7 @@ const AppTabNavigator = () => {
       activeColor="#e91e63"
       screenOptions={{
         tabBarActiveTintColor: Colors.primary,
+        headerShown: false,
       }}
     >
       <AppTab.Screen
@@ -142,12 +143,8 @@ const AppTabNavigator = () => {
 const AdminStack = createNativeStackNavigator();
 const AdminStackNavigator = () => {
   return (
-    <AdminStack.Navigator screenOptions={defaultNavOptions}>
-      <AdminStack.Screen
-        name="Admin"
-        component={AdminScreen}
-        options={{ title: "Admin" }}
-      />
+    <AdminStack.Navigator screenOptions={{ headerShown: false }}>
+      <AdminStack.Screen name="Admin" component={AdminScreen} />
       <AdminStack.Screen name="AddProject" component={CreateProjectsScreen} />
     </AdminStack.Navigator>
   );
@@ -155,17 +152,17 @@ const AdminStackNavigator = () => {
 const AppDrawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   return (
-    <AppDrawer.Navigator
-      screenOptions={{
-        activeTintColor: Colors.primary,
-      }}
-      AppDrawerStyle={{
-        width: 200,
-      }}
-      initialRouteName="AppTab"
-    >
-      <AppDrawer.Screen name="AdminStack" component={AdminStackNavigator} />
-      <AppDrawer.Screen name="AppTab" component={AppTabNavigator} />
+    <AppDrawer.Navigator initialRouteName="AppTab">
+      <AppDrawer.Screen
+        name="AdminStack"
+        component={AdminStackNavigator}
+        screenOptions={{ headerTitle: "Welcome Admin!" }}
+      />
+      <AppDrawer.Screen
+        name="AppTab"
+        component={AppTabNavigator}
+        screenOptions={{ headerShown: false }}
+      />
     </AppDrawer.Navigator>
   );
 };
