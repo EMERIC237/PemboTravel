@@ -54,7 +54,9 @@ const AdminScreen = ({ navigation }) => {
         </Card>
       </TouchableOpacity>
       <TouchableOpacity style={styles.task}>
-        <Text style={styles.taskText}> Validate a payment ?</Text>
+        <Card style={styles.taskContainer}>
+          <Text style={styles.taskText}> Validate a payment ?</Text>
+        </Card>
       </TouchableOpacity>
       <Modal visible={modalVisible}>
         <View style={styles.modalContent}>
@@ -115,4 +117,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
     borderBottomWidth: 1,
   },
+  subtitle: {
+    marginVertical: 10,
+    fontSize: 20,
+  }
 });

@@ -10,22 +10,21 @@ const SplashScreen = ({ navigation }) => {
   }, [navigation]);
 
   function NavigatetoAuth() {
-    setTimeout(() => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Projects" }],
-          });
-        } else {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Projects" }],
-          });
-        }
-      });
-    }, 1000);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Projects" }],
+        });
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Auth" }],
+        });
+      }
+    });
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>

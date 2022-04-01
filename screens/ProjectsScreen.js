@@ -8,25 +8,16 @@ import {
   SafeAreaView,
   Button,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useCallback, useLayoutEffect } from "react";
 
 import React from "react";
-import { logout } from "../store/actions/authActions";
 
 const ProjectsScreen = ({ navigation }) => {
   const allProjects = useSelector((state) => state.projects.projects);
-  const dispacth = useDispatch();
-  const onLogoutHandler = () => {
-    dispacth(logout());
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Auth" }],
-    });
-  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerLeft: () => <Button onPress={onLogoutHandler} title="Logout" />,
       headerRight: () => (
         <Button
           title="My Projects"

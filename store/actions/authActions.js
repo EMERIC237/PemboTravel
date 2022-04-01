@@ -9,6 +9,8 @@ import {
 export const AUTHENTICATE = "ATHENTICATE";
 export const LOGOUT = "LOGOUT";
 let timer;
+//!! Clear unecessary code from this file
+//TODO: Find a way to handle save data on the phone storage. This is a temporary solution
 /**
  *
  * @param {string} email
@@ -41,6 +43,14 @@ export const signup = (
           phoneNumber,
         }
       );
+      dispacth({
+        type: AUTHENTICATE,
+        payload: {
+          token: userCredentials._tokenResponse.idToken,
+          localId: userCredentials._tokenResponse.localId,
+          userId: userCredentials.user.uid,
+        },
+      });
     } catch (error) {
       let errorCode = error.code;
       let errorMsg = error.message;
@@ -64,22 +74,20 @@ export const login = (email, password) => {
         email,
         password
       );
-
-      // dispacth(
-      //   authenticate(
-      //     userCredentials.localId,
-      //     userCredentials.idToken,
-      //     parseInt(userCredentials.expiresIn) * 1000
-      //   )
-      // );
-      // const onExpiration = new Date(
-      //   new Date().getTime() + parseInt(userCredentials.expiresIn) * 1000
-      // );
-      // saveDataToStorage(
-      //   userCredentials.idToken,
-      //   userCredentials.localId,
-      //   onExpiration
-      // );
+      let paytest = {
+        token: userCredentials._tokenResponse.idToken,
+        localId: userCredentials._tokenResponse.localId,
+        userId: userCredentials.user.uid,
+      };
+      console.log(paytest);
+      dispacth({
+        type: AUTHENTICATE,
+        payload: {
+          token: userCredentials._tokenResponse.idToken,
+          localId: userCredentials._tokenResponse.localId,
+          userId: userCredentials.user.uid,
+        },
+      });
     } catch (error) {
       let errorCode = error.code;
       let errorMsg = error.message;
@@ -151,34 +159,13 @@ const setLogoutTimer = (expirationTime) => {
 };
 
 export const logout = () => {
-  clearLogoutTimer();
-  AsyncStorage.removeItem("userData");
-  return { type: LOGOUT };
+  return async (dispacth) => {
+    try {
+      await signOut(auth);
+      dispacth({ type: LOGOUT });
+      clearLogoutTimer();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 };
-/**
- * Google Authentication
- * @returns dispatch function
- */
-// export const googleSignUp = () => {
-//   return async (dispacth) => {
-//     console.log({ androidClientId });
-//     console.log({ iosClientId });
-//     try {
-//       const loginResult = await GoogleAuthentication.logInAsync({
-//         androidStandaloneAppClientId:
-//           "944635196629-g80900cpvr4s749jcj29t34sj4ktks4r.apps.googleusercontent.com",
-//         iosStandaloneAppClientId:
-//           "944635196629-g80900cpvr4s749jcj29t34sj4ktks4r.apps.googleusercontent.com",
-//         scopes: ["profile", "email"],
-//       });
-//       if (loginResult.type === "success") {
-//         const { idToken, accesToken } = loginResult;
-//         const credential = GoogleAuthProvider.credential(idToken, accesToken);
-//         signInWithCredential(auth, credential);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       throw new Error(error.message);
-//     }
-//   };
-//

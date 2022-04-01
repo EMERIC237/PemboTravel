@@ -27,6 +27,9 @@ const ImageSelector = (props) => {
       props.navigation.push("Payment", {
         imageUri: photo.uri,
         amount: props.amount,
+        projectId: props.projectId,
+        userId: props.userId,
+        projectName: props.projectName,
       });
     }
   };
