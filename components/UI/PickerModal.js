@@ -2,7 +2,29 @@ import { StyleSheet, Text, View, Modal } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 
+/**
+ *
+ * @param {*} props
+ * @requires itemsList : array of items to be displayed in the picker
+ * @requires onSelect : function to be called when an item is selected
+ * @requires selectedItem : the item that is selected by default
+ * @requires modalVisible : boolean to determine if the picker is visible or not
+ * @requires setModalVisible : function to set the modal visibility
+ * @requires itemLabel : the label of the item to be displayed in the picker
+ * @requires itemValue : the value of the item to be displayed in the picker
+ * @requires itemKeyValue : the key of the item to be displayed in the picker
+ * @returns a modal with a picker
+ */
 const PickerModal = (props) => {
+  const pickItems = props.itemsList.map((item) => {
+    return (
+      <Picker.Item
+        label={item[props.itemLabel]}
+        value={item[props.itemValue]}
+        key={item[props.itemKeyValue]}
+      />
+    );
+  });
   return (
     <View style={styles.modalStyle}>
       <Modal animationType="slide" visible={props.isOpen}>
@@ -19,7 +41,7 @@ const PickerModal = (props) => {
             selectedValue={props.selectedValue}
             onValueChange={props.onValueChange}
           >
-            {props.pickItems}
+            {pickItems}
           </Picker>
         </View>
       </Modal>

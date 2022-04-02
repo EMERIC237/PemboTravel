@@ -1,6 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import { auth } from "../firebase";
 import Colors from "../constants/Colors";
+import { setProjets } from "../store/actions/projectActions";
 import React, { useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { authenticate } from "../store/actions/authActions";
@@ -11,6 +12,11 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     NavigatetoAuth();
   }, [navigation]);
+  //load all the projects on startup
+  useEffect(() => {
+    dispatch(setProjets());
+  }, [dispatch]);
+  
   const NavigatetoAuth = useCallback(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {

@@ -56,7 +56,7 @@ const ProjectsScreen = ({ navigation }) => {
       <FlatList
         data={allProjects}
         renderItem={renderGridItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.projectId}
       />
     </SafeAreaView>
   );

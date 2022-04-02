@@ -7,11 +7,8 @@ import {
   ScrollView,
   Button,
   Image,
-  Modal,
-  SafeAreaView,
 } from "react-native";
 import React, { useCallback, useState, useRef, useEffect } from "react";
-import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/Colors";
 import { getAuth } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -104,8 +101,9 @@ const PaymentScreen = ({ route, navigation }) => {
           style={styles.choiceTextStyle}
         >
           {selectedProject
-            ? userProjects.find((project) => project.id === selectedProject)
-                .city
+            ? userProjects.find(
+                (project) => project.projectId === selectedProject
+              ).city
             : "Select a project"}
         </Text>
         <PickerModal
@@ -117,13 +115,10 @@ const PaymentScreen = ({ route, navigation }) => {
           onValueChange={(itemValue, itemIndex) =>
             setSelectedProject(itemValue)
           }
-          pickItems={userProjects.map((project) => (
-            <Picker.Item
-              label={project.city}
-              value={project.id}
-              key={project.id}
-            />
-          ))}
+          itemsList={userProjects}
+          itemLabel="city"
+          itemValue="projectId"
+          itemKeyValue="projectId"
         />
       </View>
     );

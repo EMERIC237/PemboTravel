@@ -79,7 +79,6 @@ export const login = (email, password) => {
         localId: userCredentials._tokenResponse.localId,
         userId: userCredentials.user.uid,
       };
-      console.log(paytest);
       dispacth({
         type: AUTHENTICATE,
         payload: {

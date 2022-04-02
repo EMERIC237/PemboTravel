@@ -10,15 +10,21 @@ import {
 } from "react-native";
 import Card from "../components/UI/Card";
 import Colors from "../constants/Colors";
+import PickerModal from "../components/UI/PickerModal";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeAdmin } from "../store/actions/userActions";
+import { deleteProject } from "../store/actions/projectActions";
 
 const AdminScreen = ({ navigation }) => {
   const [adminEmail, setAdminEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [selectedProject, setSelectedProject] = useState("");
+  const [onDelete, setOnDelete] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.userCredentials);
+  const projects = useSelector((state) => state.projects.projects);
   if (!user.isAdmin) {
     Alert.alert(
       "Permission denied",
@@ -35,18 +41,30 @@ const AdminScreen = ({ navigation }) => {
       Alert.alert("An error occured", error.message, [{ text: "Okay" }]);
     }
   };
+  const addProjectHandler = () => {
+    navigation.navigate("AddProject");
+  };
+  const updateProjectHandler = () => {
+    if (onDelete) {
+      dispatch(deleteProject(selectedProject));
+      setPickerVisible(!pickerVisible);
+      return;
+    }
+    setPickerVisible(!pickerVisible);
+    selectedProject &&
+      navigation.navigate("AddProject", { projectId: selectedProject });
+  };
+  const onClickDeleteOption = () => {
+    setPickerVisible(!pickerVisible);
+    setOnDelete(!onDelete);
+  };
   return (
     <View style={styles.screen}>
       <Card style={styles.titleContainer}>
         <Text style={styles.title}>Welcome here !</Text>
       </Card>
       <Text style={styles.subtitle}>What will you like to do ?</Text>
-      <TouchableOpacity
-        style={styles.task}
-        onPress={() => {
-          navigation.navigate("AddProject");
-        }}
-      >
+      <TouchableOpacity style={styles.task} onPress={addProjectHandler}>
         <Card style={styles.taskContainer}>
           <Text style={styles.taskText}>Add a new project ?</Text>
         </Card>
@@ -54,19 +72,14 @@ const AdminScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.task}
         onPress={() => {
-          navigation.navigate("AddProject");
+          setPickerVisible(!pickerVisible);
         }}
       >
         <Card style={styles.taskContainer}>
           <Text style={styles.taskText}>Update a project ?</Text>
         </Card>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.task}
-        onPress={() => {
-          navigation.navigate("AddProject");
-        }}
-      >
+      <TouchableOpacity style={styles.task} onPress={onClickDeleteOption}>
         <Card style={styles.taskContainer}>
           <Text style={styles.taskText}>Delete project ?</Text>
         </Card>
@@ -110,6 +123,16 @@ const AdminScreen = ({ navigation }) => {
           />
         </View>
       </Modal>
+      <PickerModal
+        isOpen={pickerVisible}
+        onDone={updateProjectHandler}
+        selectedValue={selectedProject}
+        onValueChange={(value, index) => setSelectedProject(value)}
+        itemsList={projects}
+        itemLabel="city"
+        itemValue="projectId"
+        itemKeyValue="projectId"
+      />
     </View>
   );
 };

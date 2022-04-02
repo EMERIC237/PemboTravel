@@ -1,13 +1,24 @@
 import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createProject } from "../store/actions/projectActions";
+import { useDispatch, useSelector } from "react-redux";
+import { createProject, updateProject } from "../store/actions/projectActions";
 import * as ImagePicker from "expo-image-picker";
-const CreateProjectsScreen = ({ navigation }) => {
-  const [projectName, setProjectName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState(null);
+const CreateProjectsScreen = ({ route, navigation }) => {
+  const projectId = route.params ? route.params.projectId : null;
+  const currentProject = useSelector((state) =>
+    state.projects.projects.find((project) => project.projectId === projectId)
+  );
+  const {
+    city: currentName,
+    description: currentDescription,
+    imageUrl: currentImage,
+    price: currentPrice,
+  } = currentProject || {};
+  //component states
+  const [projectName, setProjectName] = useState(currentName || "");
+  const [description, setDescription] = useState(currentDescription || "");
+  const [price, setPrice] = useState(currentPrice || "");
+  const [image, setImage] = useState(currentImage || null);
   const dispatch = useDispatch();
 
   const pickImage = async () => {
@@ -24,7 +35,12 @@ const CreateProjectsScreen = ({ navigation }) => {
   };
 
   const saveProjectHandler = () => {
-    dispatch(createProject(projectName, description, price, image));
+    currentProject
+      ? dispatch(
+          updateProject(projectId, projectName, description, price, image)
+        )
+      : dispatch(createProject(projectName, description, price, image));
+
     navigation.goBack();
   };
 
@@ -89,6 +105,6 @@ const styles = StyleSheet.create({
 const screenOptions = (navData) => {
   return {
     headerTitle: "Create a new Project",
-    headerL
+    headerL,
   };
-}
+};
