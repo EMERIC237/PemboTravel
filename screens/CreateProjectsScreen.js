@@ -18,8 +18,6 @@ const CreateProjectsScreen = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
@@ -73,7 +71,8 @@ export default CreateProjectsScreen;
 const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 30,
-    paddingVertical: 5,
+    paddingVertical: 10,
+    marginVertical: 10,
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
   },
@@ -87,3 +86,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+const screenOptions = (navData) => {
+  return {
+    headerTitle: "Create a new Project",
+    headerL
+  };
+}

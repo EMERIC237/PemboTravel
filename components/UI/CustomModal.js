@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Modal } from "react-native";
 import React from "react";
 
 const CustomModal = (props) => {
-  const [modalVisible, setModalVisible] = React.useState(false);
   return (
     <Modal animationType="slide" visible={props.visible}>
       {props.children}

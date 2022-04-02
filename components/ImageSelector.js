@@ -117,6 +117,16 @@ const ImageSelector = (props) => {
                 }}
               />
             </View>
+            <View style={{ position: "absolute", right: 0, bottom: 30 }}>
+              <Text
+                style={{ color: "white", fontSize: 25, fontWeight: "bold" }}
+                onPress={() => {
+                  props.navigation.goBack();
+                }}
+              >
+                Cancel
+              </Text>
+            </View>
           </View>
         </View>
       </Camera>

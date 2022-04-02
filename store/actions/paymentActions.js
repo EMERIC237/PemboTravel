@@ -22,7 +22,6 @@ export const addPayment = (userId, projectId, paymentImg, amount) => {
         status: "pending",
         createdAt: serverTimestamp(),
       };
-      console.log(paymentToAdd);
       const payment = await addDoc(collection(db, "payments"), paymentToAdd);
       dispatch({
         type: ADD_PAYMENT,

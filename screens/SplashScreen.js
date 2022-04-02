@@ -1,17 +1,22 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { auth } from "../firebase";
 import Colors from "../constants/Colors";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { authenticate } from "../store/actions/authActions";
 import { onAuthStateChanged } from "firebase/auth";
 
 const SplashScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     NavigatetoAuth();
   }, [navigation]);
-
-  function NavigatetoAuth() {
-    onAuthStateChanged(auth, (user) => {
+  const NavigatetoAuth = useCallback(() => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const checkIsAdmin = await user.getIdTokenResult();
+        user.isAdmin = checkIsAdmin.claims.admin;
+        dispatch(authenticate(user));
         navigation.reset({
           index: 0,
           routes: [{ name: "Projects" }],
@@ -23,7 +28,7 @@ const SplashScreen = ({ navigation }) => {
         });
       }
     });
-  }
+  }, [dispatch, navigation]);
 
   return (
     <View style={styles.container}>

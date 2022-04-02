@@ -11,13 +11,21 @@ import {
 import Card from "../components/UI/Card";
 import Colors from "../constants/Colors";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { makeAdmin } from "../store/actions/userActions";
 
 const AdminScreen = ({ navigation }) => {
   const [adminEmail, setAdminEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.userCredentials);
+  if (!user.isAdmin) {
+    Alert.alert(
+      "Permission denied",
+      "You need to be an admin to access this page",
+      [{ text: "OK", onPress: () => navigation.navigate("PemboTab") }]
+    );
+  }
 
   const makeAdminHandler = async () => {
     try {
@@ -41,6 +49,26 @@ const AdminScreen = ({ navigation }) => {
       >
         <Card style={styles.taskContainer}>
           <Text style={styles.taskText}>Add a new project ?</Text>
+        </Card>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.task}
+        onPress={() => {
+          navigation.navigate("AddProject");
+        }}
+      >
+        <Card style={styles.taskContainer}>
+          <Text style={styles.taskText}>Update a project ?</Text>
+        </Card>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.task}
+        onPress={() => {
+          navigation.navigate("AddProject");
+        }}
+      >
+        <Card style={styles.taskContainer}>
+          <Text style={styles.taskText}>Delete project ?</Text>
         </Card>
       </TouchableOpacity>
       <TouchableOpacity
@@ -72,6 +100,13 @@ const AdminScreen = ({ navigation }) => {
             title="Save"
             color={Colors.primary}
             onPress={makeAdminHandler}
+          />
+          <Button
+            title="Cancel"
+            color="red"
+            onPress={() => {
+              setModalVisible(false);
+            }}
           />
         </View>
       </Modal>
@@ -120,5 +155,5 @@ const styles = StyleSheet.create({
   subtitle: {
     marginVertical: 10,
     fontSize: 20,
-  }
+  },
 });

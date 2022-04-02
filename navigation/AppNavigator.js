@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import Colors from "../constants/Colors";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,23 +12,30 @@ import AuthScreen from "../screens/AuthScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import DetailContributionScreen from "../screens/DetailContributionScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { MaterialCommunityIcons, Ionicons } from "react-native-vector-icons";
 import UserProjectScreen from "../screens/UserProjectScreen";
 import AdminScreen from "../screens/AdminScreen";
 import CreateProjectsScreen from "../screens/CreateProjectsScreen";
 const defaultNavOptions = {
   headerStyle: {
-    backgroundColor: Platform.OS === "android" ? Colors.primary : "",
+    backgroundColor: Platform.OS === "android" ? "" : Colors.primary,
   },
-  // headerTitleStyle: {
-  //   fontFamily: "Cochin",
-  // },
-  // headerBackTitleStyle: {
-  //   fontFamily: "Cochin",
-  // },
-  headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
+  headerTintColor: Platform.OS === "android" ? Colors.primary : "white",
 };
 
+const AdminStack = createNativeStackNavigator();
+const AdminStackNavigator = () => {
+  return (
+    <AdminStack.Navigator screenOptions={{ headerShown: false }}>
+      <AdminStack.Screen name="Admin" component={AdminScreen} />
+      <AdminStack.Screen
+        name="AddProject"
+        component={CreateProjectsScreen}
+        options={{ headerShown: true, headerTitle: "Add Project" }}
+      />
+    </AdminStack.Navigator>
+  );
+};
 const ProjectStack = createNativeStackNavigator();
 
 const ProjectStackNavigator = () => {
@@ -74,6 +81,49 @@ const ProjectStackNavigator = () => {
     </ProjectStack.Navigator>
   );
 };
+
+const AppDrawer = createDrawerNavigator();
+const DrawerNavigator = () => {
+  return (
+    <AppDrawer.Navigator
+      initialRouteName="PemboStack"
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary },
+        headerTintColor: "white",
+        drawerActiveBackgroundColor: "#f0e1f0",
+        drawerActiveTintColor: "#3c0f0f",
+      }}
+    >
+      <AppDrawer.Screen
+        name="AdminStack"
+        component={AdminStackNavigator}
+        options={{
+          headerTitle: "Admin Only!",
+          drawerLabel: "Admin",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="ios-settings" color={color} size={size} />
+          ),
+        }}
+      />
+      <AppDrawer.Screen
+        name="PemboStack"
+        component={ProjectStackNavigator}
+        options={{
+          drawerLabel: "Users",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="person" color={color} size={size} />
+          ),
+          // headerTitle: "Pembo Projects",
+          // headerRight: () => (
+          //   <Text style={{ color: "white", fontWeight: "600", fontSize: 15 }}>
+          //     My Projects
+          //   </Text>
+          // ),
+        }}
+      />
+    </AppDrawer.Navigator>
+  );
+};
 const PaymentStack = createNativeStackNavigator();
 
 const PaymentStackNavigator = () => {
@@ -91,7 +141,6 @@ const PaymentStackNavigator = () => {
     </PaymentStack.Navigator>
   );
 };
-
 const AppTab = createBottomTabNavigator();
 const AppTabNavigator = () => {
   return (
@@ -104,7 +153,7 @@ const AppTabNavigator = () => {
     >
       <AppTab.Screen
         name="ProjectsTab"
-        component={ProjectStackNavigator}
+        component={DrawerNavigator}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -140,31 +189,4 @@ const AppTabNavigator = () => {
   );
 };
 
-const AdminStack = createNativeStackNavigator();
-const AdminStackNavigator = () => {
-  return (
-    <AdminStack.Navigator screenOptions={{ headerShown: false }}>
-      <AdminStack.Screen name="Admin" component={AdminScreen} />
-      <AdminStack.Screen name="AddProject" component={CreateProjectsScreen} />
-    </AdminStack.Navigator>
-  );
-};
-const AppDrawer = createDrawerNavigator();
-const DrawerNavigator = () => {
-  return (
-    <AppDrawer.Navigator initialRouteName="AppTab">
-      <AppDrawer.Screen
-        name="AdminStack"
-        component={AdminStackNavigator}
-        screenOptions={{ headerTitle: "Welcome Admin!" }}
-      />
-      <AppDrawer.Screen
-        name="AppTab"
-        component={AppTabNavigator}
-        screenOptions={{ headerShown: false }}
-      />
-    </AppDrawer.Navigator>
-  );
-};
-
-export default DrawerNavigator;
+export default AppTabNavigator;

@@ -1,22 +1,22 @@
 import { AUTHENTICATE, LOGOUT } from "../actions/authActions";
 const initialState = {
-  token: null,
-  localId: null,
-  userId: null,
+  userCredentials: {
+    userId: null,
+    isAdmin: false,
+  },
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATE:
       return {
-        token: action.payload.token,
-        localId: action.payload.localId,
-        userId: action.payload.userId,
-
+        ...state,
+        userCredentials: action.payload,
       };
+
     case LOGOUT:
       return initialState;
     default:
       return state;
   }
-}
+};

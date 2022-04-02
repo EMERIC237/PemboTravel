@@ -16,6 +16,7 @@ import Colors from "../constants/Colors";
 import { getAuth } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addPayment } from "../store/actions/paymentActions";
+import PickerModal from "../components/UI/PickerModal";
 
 const PaymentScreen = ({ route, navigation }) => {
   //get the amount value sent previously when calling the imageSelector and set it as a default state
@@ -64,7 +65,7 @@ const PaymentScreen = ({ route, navigation }) => {
     );
   }
   let HeadPage;
-  console.log(!userProjects.length);
+
   if (projectId) {
     HeadPage = (
       <View style={styles.head}>
@@ -107,37 +108,23 @@ const PaymentScreen = ({ route, navigation }) => {
                 .city
             : "Select a project"}
         </Text>
-
-        <View style={styles.modalStyle}>
-          <Modal animationType="slide" visible={modalVisible}>
-            <View style={styles.modalView}>
-              <View style={styles.doneView}>
-                <Text
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}
-                  style={{ fontSize: 25, color: "green", textAlign: "center" }}
-                >
-                  Done
-                </Text>
-              </View>
-              <Picker
-                selectedValue={selectedProject}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedProject(itemValue)
-                }
-              >
-                {userProjects.map((project) => (
-                  <Picker.Item
-                    label={project.city}
-                    value={project.id}
-                    key={project.id}
-                  />
-                ))}
-              </Picker>
-            </View>
-          </Modal>
-        </View>
+        <PickerModal
+          isOpen={modalVisible}
+          onDone={() => {
+            setModalVisible(!modalVisible);
+          }}
+          selectedValue={selectedProject}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedProject(itemValue)
+          }
+          pickItems={userProjects.map((project) => (
+            <Picker.Item
+              label={project.city}
+              value={project.id}
+              key={project.id}
+            />
+          ))}
+        />
       </View>
     );
   }

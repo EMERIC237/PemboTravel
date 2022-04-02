@@ -111,10 +111,15 @@ export const login = (email, password) => {
  * @param {string} token
  * @returns an action object that will be used on the reducer function
  */
-export const authenticate = (userId, token, expiryTime) => {
-  return (dispatch) => {
-    dispatch(setLogoutTimer(expiryTime));
-    dispatch({ type: AUTHENTICATE, payload: { userId, token } });
+export const authenticate = (user) => {
+  return async (dispacth) => {
+    dispacth({
+      type: AUTHENTICATE,
+      payload: {
+        userId: user.uid,
+        isAdmin: user.isAdmin,
+      },
+    });
   };
 };
 

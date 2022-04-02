@@ -14,11 +14,11 @@ export const createProject = (projectName, description, price, projectImg) => {
         serverTimestamp()
       );
       const { ...projectObj } = projectToAdd;
-      console.log("project object:", projectObj);
       const project = await addDoc(collection(db, "projects"), projectObj);
+      console.log(project.id);
       dispatch({
         type: CREATE_PROJECT,
-        payload: projectToAdd,
+        payload: { ...projectToAdd, projectId: project.id },
       });
     } catch (error) {
       console.log(error);
