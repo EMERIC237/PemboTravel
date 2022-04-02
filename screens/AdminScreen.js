@@ -29,7 +29,7 @@ const AdminScreen = ({ navigation }) => {
     Alert.alert(
       "Permission denied",
       "You need to be an admin to access this page",
-      [{ text: "OK", onPress: () => navigation.navigate("PemboTab") }]
+      [{ text: "OK", onPress: () => navigation.navigate("PemboStack") }]
     );
   }
 

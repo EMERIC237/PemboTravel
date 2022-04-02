@@ -16,8 +16,10 @@ export const DELETE_PROJECT = "DELETE_PROJECT";
 export const SET_PROJECTS = "SET_PROJECTS";
 
 export const setProjets = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      //get the user id
+      const userId = getState().auth.userCredentials.userId;
       let projects = [];
       let querySnapshot = [];
       queryFromCache = await getDocsFromCache(collection(db, "projects"));
@@ -29,7 +31,7 @@ export const setProjets = () => {
       querySnapshot.forEach((doc) => {
         projects.push({ projectId: doc.id, ...doc.data() });
       });
-      dispatch({ type: SET_PROJECTS, projects });
+      dispatch({ type: SET_PROJECTS, projects, userId });
     } catch (error) {
       console.log(error);
       throw new Error(error.message);

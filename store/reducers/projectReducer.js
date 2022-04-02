@@ -14,8 +14,8 @@ export default (state = initialState, action) => {
     case SET_PROJECTS:
       return {
         projects: action.projects,
-        userProjects: action.projects.filter(
-          (project) => project.userId === action.userId
+        userProjects: action.projects.filter((project) =>
+          project.contributors.includes(action.userId)
         ),
       };
     case CREATE_PROJECT:

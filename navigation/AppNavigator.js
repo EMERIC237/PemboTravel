@@ -179,6 +179,8 @@ const AppTabNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          ...defaultNavOptions,
+          headerShown: true,
           tabBarLabel: "Profile",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={26} />

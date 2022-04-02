@@ -111,6 +111,7 @@ export const login = (email, password) => {
  * @returns an action object that will be used on the reducer function
  */
 export const authenticate = (user) => {
+  console.log({ user });
   return async (dispacth) => {
     dispacth({
       type: AUTHENTICATE,
