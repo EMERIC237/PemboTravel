@@ -76,7 +76,7 @@ const ProjectStackNavigator = () => {
       <ProjectStack.Screen
         name="Subscribe"
         component={SubscriptionScreen}
-        initialParams={{ projectId: null }}
+        initialParams={{ projectId: null, infos: null }}
       />
     </ProjectStack.Navigator>
   );

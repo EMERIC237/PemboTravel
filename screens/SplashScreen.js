@@ -2,6 +2,7 @@ import { StyleSheet, View, Image } from "react-native";
 import { auth } from "../firebase";
 import Colors from "../constants/Colors";
 import { setProjets } from "../store/actions/projectActions";
+import { setPayments } from "../store/actions/paymentActions";
 import React, { useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { authenticate } from "../store/actions/authActions";
@@ -11,18 +12,16 @@ const SplashScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     NavigatetoAuth();
-  }, [navigation]);
-  //load all the projects on startup
-  useEffect(() => {
-    dispatch(setProjets());
-  }, [dispatch]);
-  
+  }, [navigation, dispatch]);
+
   const NavigatetoAuth = useCallback(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const checkIsAdmin = await user.getIdTokenResult();
         user.isAdmin = checkIsAdmin.claims.admin;
         dispatch(authenticate(user));
+        dispatch(setProjets());
+        dispatch(setPayments());
         navigation.reset({
           index: 0,
           routes: [{ name: "Projects" }],

@@ -16,7 +16,7 @@ const ProjectsGridTile = ({ dataList, navigation }) => {
         style={styles.projectItem}
         onPress={() => {
           navigation.navigate("Details", {
-            projectId: data.item.id,
+            projectId: data.item.projectId,
             projectName: data.item.city,
           });
         }}
@@ -37,7 +37,7 @@ const ProjectsGridTile = ({ dataList, navigation }) => {
       <FlatList
         data={dataList}
         renderItem={renderGridItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.projectId}
       />
     </SafeAreaView>
   );

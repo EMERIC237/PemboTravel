@@ -1,4 +1,4 @@
-import ImageSelector from "../components/ImageSelector";
+import ImageSelector from "../components/extends/ImageSelector";
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import Colors from "../constants/Colors";
-import { getAuth } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addPayment } from "../store/actions/paymentActions";
 import PickerModal from "../components/UI/PickerModal";
@@ -21,9 +20,7 @@ const PaymentScreen = ({ route, navigation }) => {
   //get the current user
 
   // TODO : Find a way to handle data commuication between screens more easy
-  const auth = getAuth();
-  const user = auth.currentUser;
-  const userId = user.uid;
+  const userId = useSelector((state) => state.auth.userCredentials.userId);
   const [amount, setAmount] = useState(prevAmount);
   const [ontakenImage, setOnTakenImage] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -76,12 +73,13 @@ const PaymentScreen = ({ route, navigation }) => {
     HeadPage = (
       <View style={styles.head}>
         <Text style={styles.headText}>
-          You don't have any cuurent project now. Please subscribe to one of our
+          You don't have any curent project now. Please subscribe to one of our
           beatiful projects{" "}
           <Text
             onPress={() => {
               navigation.navigate("ProjectsTab");
             }}
+            style={styles.link}
           >
             here{" "}
           </Text>
@@ -202,6 +200,12 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  link: {
+    color:"#19b2e0",
+    fontWeight: "bold",
+    marginStart: 5,
+    textDecorationLine: "underline",
   },
   buttonContainer: {
     marginTop: 10,

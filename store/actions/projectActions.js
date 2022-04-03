@@ -14,6 +14,7 @@ export const CREATE_PROJECT = "CREATE_PROJECT";
 export const UPDATE_PROJECT = "UPDATE_PROJECT";
 export const DELETE_PROJECT = "DELETE_PROJECT";
 export const SET_PROJECTS = "SET_PROJECTS";
+export const ADD_CONTRIBUTOR = "ADD_CONTRIBUTOR";
 
 export const setProjets = () => {
   return async (dispatch, getState) => {
@@ -127,6 +128,23 @@ export const deleteProject = (projectId) => {
       dispatch({
         type: DELETE_PROJECT,
         payload: projectId,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
+  };
+};
+
+export const addContributor = (projectId, userId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: ADD_CONTRIBUTOR,
+        payload: {
+          projectId: projectId,
+          userId: userId,
+        },
       });
     } catch (error) {
       console.log(error);

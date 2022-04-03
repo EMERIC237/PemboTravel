@@ -3,6 +3,7 @@ import {
   UPDATE_PROJECT,
   CREATE_PROJECT,
   DELETE_PROJECT,
+  ADD_CONTRIBUTOR,
 } from "../actions/projectActions";
 const initialState = {
   projects: [],
@@ -48,6 +49,32 @@ export default (state = initialState, action) => {
       return {
         ...state,
         projects: filteredProjects,
+      };
+    case ADD_CONTRIBUTOR:
+      const updatedUserProjects = state.userProjects.map((project) => {
+        if (project.id === action.payload.projectId) {
+          const updatedProject = {
+            ...project,
+            contributors: [...project.contributors, action.payload.userId],
+          };
+          return updatedProject;
+        }
+        return project;
+      });
+      const updatedProjects2 = state.projects.map((project) => {
+        if (project.id === action.payload.projectId) {
+          const updatedProject = {
+            ...project,
+            contributors: [...project.contributors, action.payload.userId],
+          };
+          return updatedProject;
+        }
+        return project;
+      });
+      return {
+        ...state,
+        userProjects: updatedUserProjects,
+        projects: updatedProjects2,
       };
 
     default:

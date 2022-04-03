@@ -9,11 +9,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Button,
+  Image,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useReducer, useCallback } from "react";
+import ButtonImagePicker from "../components/extends/ButtonImagePicker";
 import Input from "../components/UI/Input";
 import { signup } from "../store/actions/authActions";
+import { updateUser } from "../store/actions/userActions";
 const FORM_UPDATE = "FORM_UPDATE";
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
@@ -41,23 +44,24 @@ const formReducer = (state, action) => {
 
 const SubscriptionScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const { projectId } = route.params;
+  const { projectId, infos } = route.params;
+  const [image, setImage] = useState(null);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      prenom: "",
-      nom: "",
-      phoneNumber: "",
-      email: "",
+      firstName: infos.firstName || "",
+      lastName: infos.lastName || "",
+      phoneNumber: infos.phone || "",
+      email: infos.email || "",
       password: "",
     },
     inputValidities: {
-      prenom: false,
-      nom: false,
-      phoneNumber: false,
-      email: false,
-      password: false,
+      firstName: infos ? true : false,
+      lastName: infos ? true : false,
+      phoneNumber: infos ? true : false,
+      email: infos ? true : false,
+      password: infos ? true : false,
     },
-    formIsValid: false,
+    formIsValid: infos ? true : false,
   });
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
@@ -66,12 +70,26 @@ const SubscriptionScreen = ({ route, navigation }) => {
       ]);
       return;
     }
+    if (infos) {
+      dispatch(
+        await updateUser(
+          infos.id,
+          formState.inputValues.firstName,
+          formState.inputValues.lastName,
+          formState.inputValues.phoneNumber,
+          formState.inputValues.email,
+          image
+        )
+      );
+      navigation.goBack();
+      return;
+    }
     dispatch(
       signup(
         formState.inputValues.email,
         formState.inputValues.password,
-        formState.inputValues.nom,
-        formState.inputValues.prenom,
+        formState.inputValues.lastName,
+        formState.inputValues.firstName,
         formState.inputValues.phoneNumber,
         projectId
       )
@@ -98,28 +116,28 @@ const SubscriptionScreen = ({ route, navigation }) => {
         <ScrollView>
           <View>
             <Input
-              id="prenom"
-              label="Prenom"
+              id="firstName"
+              label="firstName"
               errorText="Please enter a valid name"
               keyboardType="default"
               autoCapitalize="sentences"
               autoCorrect
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue=""
-              initiallyValid={false}
+              initialValue={infos.firstName ? infos.firstName : ""}
+              initiallyValid={!!infos}
             />
             <Input
-              id="nom"
-              label="Nom"
+              id="lastName"
+              label="lastName"
               errorText="Please enter a valid name"
               keyboardType="default"
               autoCapitalize="sentences"
               autoCorrect
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue=""
-              initiallyValid={false}
+              initialValue={infos.lastName ? infos.lastName : ""}
+              initiallyValid={!!infos}
             />
             <Input
               id="phoneNumber"
@@ -128,8 +146,8 @@ const SubscriptionScreen = ({ route, navigation }) => {
               keyboardType="phone-pad"
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue=""
-              initiallyValid={false}
+              initialValue={infos.phone || ""}
+              initiallyValid={!!infos}
             />
             <Input
               id="email"
@@ -141,8 +159,8 @@ const SubscriptionScreen = ({ route, navigation }) => {
               required
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue=""
-              initiallyValid={false}
+              initialValue={infos.email || ""}
+              initiallyValid={!!infos}
             />
             <Input
               id="password"
@@ -151,13 +169,21 @@ const SubscriptionScreen = ({ route, navigation }) => {
               keyboardType="default"
               autoCorrect
               required
+              editable={infos ? false : true}
               secureTextEntry
               returnKeyType="done"
               onInputChange={inputChangeHandler}
-              initialValue=""
-              initiallyValid={false}
+              initialValue={infos.password || ""}
+              initiallyValid={!!infos}
               minLength={8}
             />
+          </View>
+          <View>
+            <View style={styles.buttonContainer}>
+              <Text>You can add a picture here:</Text>
+              <ButtonImagePicker onImageTaken={setImage} />
+              {image && <Image source={{ uri: image }} style={styles.image} />}
+            </View>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -168,4 +194,11 @@ const SubscriptionScreen = ({ route, navigation }) => {
 
 export default SubscriptionScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: { width: 200, height: 200 },
+});

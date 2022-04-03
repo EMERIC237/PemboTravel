@@ -1,6 +1,7 @@
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { insertInfos } from "../../utils/database";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -15,16 +16,16 @@ let timer;
  *
  * @param {string} email
  * @param {string} password
- * @param {string} nom
- * @param {string} prenom
+ * @param {string} lastName
+ * @param {string} firstName
  * @param {string} phoneNumber
- * @returns a dispatch funcyion that will be called by the redux thun and return an action object
+ * @returns a dispatch function that will be called by the redux thun and return an action object
  */
 export const signup = (
   email,
   password,
-  nom,
-  prenom,
+  lastName,
+  firstName,
   phoneNumber,
   projectId
 ) => {
@@ -38,11 +39,12 @@ export const signup = (
       const response = await setDoc(
         doc(db, "users", userCredentials.user.uid),
         {
-          nom,
-          prenom,
+          lastName,
+          firstName,
           phoneNumber,
         }
       );
+      await insertInfos(firstName, lastName, email, phoneNumber);
       dispacth({
         type: AUTHENTICATE,
         payload: {
@@ -111,7 +113,6 @@ export const login = (email, password) => {
  * @returns an action object that will be used on the reducer function
  */
 export const authenticate = (user) => {
-  console.log({ user });
   return async (dispacth) => {
     dispacth({
       type: AUTHENTICATE,

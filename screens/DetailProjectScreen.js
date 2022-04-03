@@ -1,23 +1,20 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
-import { getAuth } from "firebase/auth";
 import Colors from "../constants/Colors";
 
 const DetailProjectScreen = ({ route, navigation }) => {
   const { projectId } = route.params;
   const selectedProject = useSelector((state) =>
-    state.projects.projects.find((project) => project.id === projectId)
+    state.projects.projects.find((project) => project.projectId === projectId)
   );
+  //get the userIf from redux
+  const userId = useSelector((state) => state.auth.userCredentials.userId);
 
-  const auth = getAuth();
-
-  //render conditionally button base of if the user is logged in or not
   let ShowedButton;
-  //get the current user
-  const user = auth.currentUser;
+
   //if the user is logged in
-  if (user) {
+  if (userId) {
     ShowedButton = (
       <Button
         title="Make a payment"
@@ -27,7 +24,7 @@ const DetailProjectScreen = ({ route, navigation }) => {
             screen: "Payment",
             params: {
               projectId,
-              userId: user.uid,
+              userId,
               projectName: selectedProject.city,
             },
           });
@@ -40,7 +37,7 @@ const DetailProjectScreen = ({ route, navigation }) => {
         title="Subscribe"
         color={Colors.primary}
         onPress={() => {
-          navigation.navigate("Subscribe");
+          navigation.navigate("Subscribe", { projectId });
         }}
       />
     );

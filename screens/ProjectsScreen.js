@@ -35,7 +35,7 @@ const ProjectsScreen = ({ navigation }) => {
         style={styles.projectItem}
         onPress={() => {
           navigation.navigate("Details", {
-            projectId: data.item.id,
+            projectId: data.item.projectId,
             projectName: data.item.city,
           });
         }}
