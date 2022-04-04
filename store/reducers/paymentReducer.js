@@ -1,4 +1,9 @@
-import { ADD_PAYMENT, SET_PAYMENTS, GET_ALL_PAYMENTS } from "../actions/paymentActions";
+import {
+  ADD_PAYMENT,
+  SET_PAYMENTS,
+  GET_ALL_PAYMENTS,
+  UPDATE_PAYMENT_STATUS,
+} from "../actions/paymentActions";
 const initialState = {
   allPayments: [],
   payments: [],
@@ -23,19 +28,25 @@ export default (state = initialState, action) => {
       return {
         ...state,
         allPayments: action.payments,
-      }
-    // case VERIFY_PAYMENT:
-    //   return {
-    //     ...state,
-    //     verifiedPayments: [...state.verifiedPayments, action.payload],
-    //   };
-    // case DELETE_PAYMENT:
-    //   return {
-    //     ...state,
-    //     payments: state.payments.filter(
-    //       (payment) => payment.id !== action.payload
-    //     ),
-    //   };
+      };
+    case UPDATE_PAYMENT_STATUS:
+      const paymentsUpdater = (payments) => {
+        return payments.map((payment) => {
+          if (payment.paymentId === action.paymentId) {
+            return {
+              ...payment,
+              status: action.status,
+            };
+          }
+          return payment;
+        });
+      };
+      return {
+        ...state,
+        payments: paymentsUpdater(state.payments),
+        allPayments: paymentsUpdater(state.allPayments),
+        verifiedPayments: paymentsUpdater(state.verifiedPayments),
+      };
     default:
       return state;
   }

@@ -1,25 +1,17 @@
 import { StyleSheet, Text, View, Button, Image } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/actions/authActions";
 import React, { useEffect, useState } from "react";
-import { fetchInfos } from "../utils/database";
 
-//* The information here are coming from the phone's database 
+//* The information here are coming from the phone's database
 //* so only the user of the phone can acces his informations here
 const ProfileScreen = ({ navigation }) => {
-  const [infos, setInfos] = useState();
   const dispacth = useDispatch();
-
-  //TODO: move the fechtinfos from here and put where the app is loading or start
-  //fetch user infos from the database
-  useEffect(() => {
-    async function loadInfos() {
-      const fetchedInfos = await fetchInfos();
-      setInfos(fetchedInfos);
-    }
-    loadInfos();
-  }, []);
-
+  //get the user userInfos from the redux store
+  const userInfos = useSelector((state) => {
+    return state.user;
+  });
+  console.log({ userInfos });
   const onLogoutHandler = () => {
     dispacth(logout());
     navigation.reset({
@@ -28,7 +20,7 @@ const ProfileScreen = ({ navigation }) => {
     });
   };
 
-  if (!infos) {
+  if (!userInfos) {
     return (
       <View>
         <Text>Loading...</Text>
@@ -42,13 +34,13 @@ const ProfileScreen = ({ navigation }) => {
         <View style={{ ...styles.infoView, ...styles.picture }}>
           <Text style={styles.infoText}>
             Your picture:{" "}
-            <Text>{infos.picture ? null : "Not picture yet"}</Text>
+            <Text>{userInfos.picture ? null : "Not picture yet"}</Text>
           </Text>
 
           <View style={styles.imageContainer}>
             <Image
               source={{
-                uri: infos.picture,
+                uri: userInfos.picture,
               }}
               resizeMethod="resize"
               resizeMode="center"
@@ -57,16 +49,18 @@ const ProfileScreen = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.infoView}>
-          <Text style={styles.infoText}>First name: {infos.firstName}</Text>
+          <Text style={styles.infoText}>First name: {userInfos.firstName}</Text>
         </View>
         <View style={styles.infoView}>
-          <Text style={styles.infoText}>Last name: {infos.lastName}</Text>
+          <Text style={styles.infoText}>Last name: {userInfos.lastName}</Text>
         </View>
         <View style={styles.infoView}>
-          <Text style={styles.infoText}>Your phone number: {infos.phone}</Text>
+          <Text style={styles.infoText}>
+            Your phone number: {userInfos.phone}
+          </Text>
         </View>
         <View style={styles.infoView}>
-          <Text style={styles.infoText}>Your email: {infos.email}</Text>
+          <Text style={styles.infoText}>Your email: {userInfos.email}</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -82,7 +76,7 @@ const ProfileScreen = ({ navigation }) => {
         <Button
           title="Change my informations"
           onPress={() => {
-            navigation.navigate("Subscribe", { infos });
+            navigation.navigate("Subscribe", { infos: userInfos });
           }}
           style={styles.button}
         />

@@ -16,6 +16,7 @@ import {
 export const ADD_PAYMENT = "ADD_PAYMENT";
 export const SET_PAYMENTS = "SET_PAYMENTS";
 export const GET_ALL_PAYMENTS = "GET_ALL_PAYMENTS";
+export const UPDATE_PAYMENT_STATUS = "UPDATE_PAYMENT_STATUS";
 
 /**
  *
@@ -111,3 +112,29 @@ export const getAllPayments = () => {
     }
   };
 };
+
+//function to update payment status
+/**
+ * Function to update payment status to verified or rejected
+ * @param {*} paymentId 
+ * @param {*} status 
+ * @returns 
+ */
+export const updatePaymentStatus = (paymentId, status) => {
+  return async (dispatch) => {
+    try {
+      const paymentRef = doc(db, "payments", paymentId);
+      await updateDoc(paymentRef, {
+        status,
+      });
+      dispatch({
+        type: UPDATE_PAYMENT_STATUS,
+        paymentId,
+        status,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
+  };
+}

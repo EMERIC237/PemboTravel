@@ -1,7 +1,7 @@
 import { functions } from "../../firebase";
 import { httpsCallable } from "firebase/functions";
 import { db } from "../../firebase";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDoc, getDocFromCache } from "firebase/firestore";
 import { updateInfos, fetchInfos } from "../../utils/database";
 
 export const MAKE_ADMIN = "MAKE_ADMIN";
@@ -21,13 +21,30 @@ export const makeAdmin = (userEmail) => {
 };
 
 export const setUser = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      let userInfos = {};
+      let querySnapshot = {};
       const user = await fetchInfos();
+      //if we don't get the user from the phone storage, we get it from the database
+      if (!user) {
+        // get the user id
+        const userId = getState().auth.userCredentials.userId;
+        const userRef = doc(db, "users", userId);
+        querySnapshot = await getDoc(userRef);
+      } else {
+        querySnapshot = user;
+      }
+      userInfos = querySnapshot.data();
       dispatch({
         type: SET_USER,
         payload: {
-          user: user,
+          id: userId,
+          firstName: userInfos.firstName,
+          lastName: userInfos.lastName,
+          email: userInfos,
+          phone: userInfos.phoneNumber,
+          picture: userInfos.picture || "",
         },
       });
     } catch (error) {

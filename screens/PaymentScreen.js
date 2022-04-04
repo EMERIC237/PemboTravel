@@ -40,7 +40,7 @@ const PaymentScreen = ({ route, navigation }) => {
   };
 
   const savePaymentHandler = () => {
-    if(!amount || !selectedProject || !imageUri || !userId) {
+    if(!amount || !imageUri || !userId) {
       Alert.alert("Error", "Please fill all the fields", [{ text: "Okay" }]);
       return;
     }

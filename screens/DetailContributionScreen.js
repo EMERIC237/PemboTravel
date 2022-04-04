@@ -11,9 +11,10 @@ const DetailContributionScreen = ({ navigation }) => {
     const project = projects.find(
       (project) => project.projectId === payment.projectId
     );
+
     return {
       ...payment,
-      projectName: project.city,
+      projectName: project ? project.city : "Pembo",
     };
   });
 

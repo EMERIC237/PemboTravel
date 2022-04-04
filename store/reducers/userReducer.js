@@ -1,14 +1,12 @@
 import { SET_USER, UPDATE_USER } from "../actions/userActions";
 //reducer for user
 const initialState = {
-  user: {
-    id: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    picture: "",
-  },
+  id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  picture: "",
 };
 
 export default (state = initialState, action) => {
@@ -16,7 +14,7 @@ export default (state = initialState, action) => {
     case SET_USER:
       return {
         ...state,
-        user: action.user,
+        ...action.payload.user,
       };
     case UPDATE_USER:
       return {

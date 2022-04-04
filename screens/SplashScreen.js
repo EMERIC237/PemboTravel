@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 import Colors from "../constants/Colors";
 import { setProjets } from "../store/actions/projectActions";
 import { setPayments } from "../store/actions/paymentActions";
+import { setUser } from "../store/actions/userActions";
 import React, { useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { authenticate } from "../store/actions/authActions";
@@ -22,6 +23,8 @@ const SplashScreen = ({ navigation }) => {
         dispatch(authenticate(user));
         dispatch(setProjets());
         dispatch(setPayments());
+        dispatch(setUser());
+
         navigation.reset({
           index: 0,
           routes: [{ name: "Projects" }],
