@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import React from "react";
 import PinchableImage from "../UI/PinchableImage";
 import DoubleTap from "../UI/DoubleTap";
 import { Ionicons } from "@expo/vector-icons";
@@ -121,6 +120,12 @@ const PaymentsGridTile = (props) => {
               "https://cdn.britannica.com/22/187022-138-64E249E2/facts-paper-money.jpg?w=800&h=450&c=crop"
             }
           />
+          {props.toValidate ? (
+            <View style={styles.validateContainer}>
+              <Text style={styles.validateText}>Validate</Text>
+              <Text style={styles.validateText}>Denied</Text>
+            </View>
+          ) : null}
         </View>
       </Modal>
     </SafeAreaView>

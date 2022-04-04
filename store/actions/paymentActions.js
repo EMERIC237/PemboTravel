@@ -10,10 +10,12 @@ import {
   query,
   where,
   getDocs,
+  getDocsFromCache,
 } from "firebase/firestore";
 // Add payment function
 export const ADD_PAYMENT = "ADD_PAYMENT";
 export const SET_PAYMENTS = "SET_PAYMENTS";
+export const GET_ALL_PAYMENTS = "GET_ALL_PAYMENTS";
 
 /**
  *
@@ -75,6 +77,32 @@ export const setPayments = () => {
       });
       dispatch({
         type: SET_PAYMENTS,
+        payments,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
+  };
+};
+
+//function to get all payments as an admin
+export const getAllPayments = () => {
+  return async (dispatch) => {
+    try {
+      let payments = [];
+      let querySnapshot = [];
+      queryFromCache = await getDocsFromCache(collection(db, "payments"));
+      if (queryFromCache.length) {
+        querySnapshot = queryFromCache;
+      } else {
+        querySnapshot = await getDocs(collection(db, "payments"));
+      }
+      querySnapshot.forEach((doc) => {
+        payments.push({ paymentId: doc.id, ...doc.data() });
+      });
+      dispatch({
+        type: GET_ALL_PAYMENTS,
         payments,
       });
     } catch (error) {

@@ -1,5 +1,6 @@
-import { ADD_PAYMENT, SET_PAYMENTS } from "../actions/paymentActions";
+import { ADD_PAYMENT, SET_PAYMENTS, GET_ALL_PAYMENTS } from "../actions/paymentActions";
 const initialState = {
+  allPayments: [],
   payments: [],
   verifiedPayments: [],
 };
@@ -18,6 +19,11 @@ export default (state = initialState, action) => {
         ...state,
         payments: [...state.payments, action.payload],
       };
+    case GET_ALL_PAYMENTS:
+      return {
+        ...state,
+        allPayments: action.payments,
+      }
     // case VERIFY_PAYMENT:
     //   return {
     //     ...state,

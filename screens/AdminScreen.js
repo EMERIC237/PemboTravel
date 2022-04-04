@@ -15,7 +15,8 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeAdmin } from "../store/actions/userActions";
 import { deleteProject } from "../store/actions/projectActions";
-import { set } from "react-native-reanimated";
+import { getAllPayments } from "../store/actions/paymentActions";
+
 
 const AdminScreen = ({ navigation }) => {
   const [adminEmail, setAdminEmail] = useState("");
@@ -33,7 +34,14 @@ const AdminScreen = ({ navigation }) => {
       [{ text: "OK", onPress: () => navigation.navigate("PemboStack") }]
     );
   }
-
+  const validatePaymenHandler = async () => {
+    try {
+      await dispatch(getAllPayments());
+      navigation.navigate("Validate");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const makeAdminHandler = async () => {
     try {
       await dispatch(makeAdmin(adminEmail));
@@ -95,7 +103,7 @@ const AdminScreen = ({ navigation }) => {
           <Text style={styles.taskText}>Add a new admin ?</Text>
         </Card>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.task}>
+      <TouchableOpacity style={styles.task} onPress={validatePaymenHandler}>
         <Card style={styles.taskContainer}>
           <Text style={styles.taskText}> Validate a payment ?</Text>
         </Card>

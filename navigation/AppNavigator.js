@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, Text } from "react-native";
+import { Platform, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -16,6 +16,7 @@ import { MaterialCommunityIcons, Ionicons } from "react-native-vector-icons";
 import UserProjectScreen from "../screens/UserProjectScreen";
 import AdminScreen from "../screens/AdminScreen";
 import CreateProjectsScreen from "../screens/CreateProjectsScreen";
+import ValidateScreen from "../screens/ValidateScreen";
 const defaultNavOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === "android" ? "" : Colors.primary,
@@ -33,6 +34,7 @@ const AdminStackNavigator = () => {
         component={CreateProjectsScreen}
         options={{ headerShown: true, headerTitle: "Add Project" }}
       />
+      <AdminStack.Screen name="Validate" component={ValidateScreen} />
     </AdminStack.Navigator>
   );
 };
@@ -137,6 +139,18 @@ const PaymentStackNavigator = () => {
       <PaymentStack.Screen
         name="DetailContribution"
         component={DetailContributionScreen}
+        options={({ navigation, route }) => ({
+          headerTitle: "Contributions",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Ionicons name="ios-arrow-back" size={25} color="white" />
+            </TouchableOpacity>
+          ),
+        })}
       />
     </PaymentStack.Navigator>
   );
