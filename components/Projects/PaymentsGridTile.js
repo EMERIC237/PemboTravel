@@ -6,35 +6,20 @@ import {
   Image,
   SafeAreaView,
   FlatList,
-  TouchableOpacity,
 } from "react-native";
-import PinchableImage from "../components/UI/PinchableImage";
-import DoubleTap from "../components/UI/DoubleTap";
+import React from "react";
+import PinchableImage from "../UI/PinchableImage";
+import DoubleTap from "../UI/DoubleTap";
 import { Ionicons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
 import React, { useCallback, useState } from "react";
 const flexCenter = {
   flex: 1,
   justifyContent: "center",
   alignItems: "center",
 };
-const DetailContributionScreen = ({ navigation }) => {
-  const payments = useSelector((state) => state.payment.payments);
-  const projects = useSelector((state) => state.projects.projects);
-  // add the project name to every payment using the project id
-  const paymentsWithProjectName = payments.map((payment) => {
-    const project = projects.find(
-      (project) => project.projectId === payment.projectId
-    );
-    return {
-      ...payment,
-      projectName: project.city,
-    };
-  });
 
+const PaymentsGridTile = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  //Function to set the backgroundColor and the icon name depending on the payment status
   const getProperties = (status) => {
     let properties = {
       bgColor: { backgroundColor: "white" },
@@ -62,9 +47,9 @@ const DetailContributionScreen = ({ navigation }) => {
     return (
       <View style={styles.contributionContainer}>
         {/* <Image
-              source={{ uri: data.item.imageUrl }}
-              style={styles.imgPayment}
-            /> */}
+                  source={{ uri: data.item.imageUrl }}
+                  style={styles.imgPayment}
+                /> */}
         {/*image use for demonstration*/}
         <DoubleTap
           style={styles.detailImgItem}
@@ -75,9 +60,9 @@ const DetailContributionScreen = ({ navigation }) => {
         >
           <View>
             {/* <Image
-              source={{ uri: data.item.imageUrl }}
-              style={styles.imgPayment}
-            /> */}
+                  source={{ uri: data.item.imageUrl }}
+                  style={styles.imgPayment}
+                /> */}
             {/*image use for demonstration*/}
             <Image
               source={{
@@ -115,7 +100,7 @@ const DetailContributionScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
-        data={paymentsWithProjectName}
+        data={props.dataList}
         renderItem={renderGridItem}
         keyExtractor={(item) => item.paymentId}
       />
@@ -142,7 +127,7 @@ const DetailContributionScreen = ({ navigation }) => {
   );
 };
 
-export default DetailContributionScreen;
+export default PaymentsGridTile;
 
 const styles = StyleSheet.create({
   contributionContainer: {

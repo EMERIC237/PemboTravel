@@ -58,7 +58,7 @@ const ImageSelector = (props) => {
               onPress={() => {}}
               style={{
                 backgroundColor: "#000",
-                borderRadius: "50%",
+                borderRadius: 50,
                 height: 25,
                 width: 25,
               }}
@@ -74,7 +74,7 @@ const ImageSelector = (props) => {
             <TouchableOpacity
               style={{
                 marginTop: 20,
-                borderRadius: "50%",
+                borderRadius: 50,
                 height: 25,
                 width: 25,
               }}
@@ -121,7 +121,10 @@ const ImageSelector = (props) => {
               <Text
                 style={{ color: "white", fontSize: 25, fontWeight: "bold" }}
                 onPress={() => {
-                  props.navigation.goBack();
+                  props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Payment" }],
+                  });
                 }}
               >
                 Cancel

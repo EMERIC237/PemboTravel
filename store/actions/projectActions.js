@@ -61,7 +61,6 @@ export const createProject = (projectName, description, price, projectImg) => {
       );
       const { ...projectObj } = projectToAdd;
       const project = await addDoc(collection(db, "projects"), projectObj);
-      console.log(project.id);
       dispatch({
         type: CREATE_PROJECT,
         payload: { ...projectToAdd, projectId: project.id },

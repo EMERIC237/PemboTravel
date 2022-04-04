@@ -7,6 +7,7 @@ import {
   ScrollView,
   Button,
   Image,
+  Alert
 } from "react-native";
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import Colors from "../constants/Colors";
@@ -39,6 +40,10 @@ const PaymentScreen = ({ route, navigation }) => {
   };
 
   const savePaymentHandler = () => {
+    if(!amount || !selectedProject || !imageUri || !userId) {
+      Alert.alert("Error", "Please fill all the fields", [{ text: "Okay" }]);
+      return;
+    }
     dispatch(addPayment(userId, projectId, imageUri, amount));
     navigation.navigate("DetailContribution");
   };
@@ -106,6 +111,10 @@ const PaymentScreen = ({ route, navigation }) => {
         </Text>
         <PickerModal
           isOpen={modalVisible}
+          onCancel={() => {
+            setSelectedProject(undefined);
+            setModalVisible(!modalVisible);
+          }}
           onDone={() => {
             setModalVisible(!modalVisible);
           }}
@@ -202,7 +211,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   link: {
-    color:"#19b2e0",
+    color: "#19b2e0",
     fontWeight: "bold",
     marginStart: 5,
     textDecorationLine: "underline",

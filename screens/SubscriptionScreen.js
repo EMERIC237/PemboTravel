@@ -48,10 +48,10 @@ const SubscriptionScreen = ({ route, navigation }) => {
   const [image, setImage] = useState(null);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      firstName: infos.firstName || "",
-      lastName: infos.lastName || "",
-      phoneNumber: infos.phone || "",
-      email: infos.email || "",
+      firstName: infos ? infos.firstName : "",
+      lastName: infos ? infos.lastName : "",
+      phoneNumber: infos ? infos.phone : "",
+      email: infos ? infos.email : "",
       password: "",
     },
     inputValidities: {
@@ -124,7 +124,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
               autoCorrect
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue={infos.firstName ? infos.firstName : ""}
+              initialValue={infos ? infos.firstName : ""}
               initiallyValid={!!infos}
             />
             <Input
@@ -136,7 +136,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
               autoCorrect
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue={infos.lastName ? infos.lastName : ""}
+              initialValue={infos ? infos.lastName : ""}
               initiallyValid={!!infos}
             />
             <Input
@@ -146,7 +146,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
               keyboardType="phone-pad"
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue={infos.phone || ""}
+              initialValue={infos ? infos.phone : ""}
               initiallyValid={!!infos}
             />
             <Input
@@ -159,7 +159,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
               required
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue={infos.email || ""}
+              initialValue={infos ? infos.email : ""}
               initiallyValid={!!infos}
             />
             <Input
@@ -173,7 +173,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
               secureTextEntry
               returnKeyType="done"
               onInputChange={inputChangeHandler}
-              initialValue={infos.password || ""}
+              initialValue={infos ? infos.password : ""}
               initiallyValid={!!infos}
               minLength={8}
             />

@@ -4,10 +4,13 @@ import { logout } from "../store/actions/authActions";
 import React, { useEffect, useState } from "react";
 import { fetchInfos } from "../utils/database";
 
+//* The information here are coming from the phone's database 
+//* so only the user of the phone can acces his informations here
 const ProfileScreen = ({ navigation }) => {
   const [infos, setInfos] = useState();
   const dispacth = useDispatch();
 
+  //TODO: move the fechtinfos from here and put where the app is loading or start
   //fetch user infos from the database
   useEffect(() => {
     async function loadInfos() {
@@ -143,5 +146,5 @@ const styles = StyleSheet.create({
   picture: {
     flexDirection: "row",
     justifyContent: "space-around",
-  }
+  },
 });

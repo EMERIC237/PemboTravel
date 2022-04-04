@@ -38,7 +38,7 @@ export const addPayment = (userId, projectId, paymentImg, amount) => {
         status: "pending",
         createdAt: serverTimestamp(),
       };
-      await addDoc(collection(db, "payments"), paymentToAdd);
+      const payment = await addDoc(collection(db, "payments"), paymentToAdd);
       //After adding the payment, we need to update the project's contributors
       if (!project.contributors.includes(userId)) {
         //if the user is already a contributor, we just need to update the amount
@@ -50,7 +50,7 @@ export const addPayment = (userId, projectId, paymentImg, amount) => {
       }
       dispatch({
         type: ADD_PAYMENT,
-        payload: paymentToAdd,
+        payload: { ...paymentToAdd, paymentId: payment.id },
       });
     } catch (error) {
       console.log(error);

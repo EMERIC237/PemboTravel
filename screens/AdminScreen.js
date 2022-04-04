@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeAdmin } from "../store/actions/userActions";
 import { deleteProject } from "../store/actions/projectActions";
+import { set } from "react-native-reanimated";
 
 const AdminScreen = ({ navigation }) => {
   const [adminEmail, setAdminEmail] = useState("");
@@ -125,6 +126,9 @@ const AdminScreen = ({ navigation }) => {
       </Modal>
       <PickerModal
         isOpen={pickerVisible}
+        onCancel={() => {
+          setPickerVisible(!pickerVisible);
+        }}
         onDone={updateProjectHandler}
         selectedValue={selectedProject}
         onValueChange={(value, index) => setSelectedProject(value)}
