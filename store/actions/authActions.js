@@ -89,7 +89,9 @@ export const login = (email, password) => {
       );
       const user = userCredentials.user;
       const checkIsAdmin = await user.getIdTokenResult();
-      user.isAdmin = checkIsAdmin.claims.admin;
+      user.isAdmin = checkIsAdmin.claims.admin
+        ? checkIsAdmin.claims.admin
+        : false;
 
       dispacth({
         type: AUTHENTICATE,

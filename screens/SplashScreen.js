@@ -17,11 +17,13 @@ const SplashScreen = ({ navigation }) => {
 
   const NavigatetoAuth = useCallback(() => {
     onAuthStateChanged(auth, async (user) => {
+      dispatch(setProjets());
       if (user) {
         const checkIsAdmin = await user.getIdTokenResult();
-        user.isAdmin = checkIsAdmin.claims.admin;
+        user.isAdmin = checkIsAdmin.claims.admin
+          ? checkIsAdmin.claims.admin
+          : false;
         dispatch(authenticate(user));
-        dispatch(setProjets());
         dispatch(setPayments());
         dispatch(setUser());
 

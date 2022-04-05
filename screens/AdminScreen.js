@@ -17,7 +17,6 @@ import { makeAdmin } from "../store/actions/userActions";
 import { deleteProject } from "../store/actions/projectActions";
 import { getAllPayments } from "../store/actions/paymentActions";
 
-
 const AdminScreen = ({ navigation }) => {
   const [adminEmail, setAdminEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,9 +24,10 @@ const AdminScreen = ({ navigation }) => {
   const [selectedProject, setSelectedProject] = useState("");
   const [onDelete, setOnDelete] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.userCredentials);
+  const isAdmin = useSelector((state) => state.auth.userCredentials.isAdmin);
   const projects = useSelector((state) => state.projects.projects);
-  if (!user.isAdmin) {
+
+  if (!isAdmin) {
     Alert.alert(
       "Permission denied",
       "You need to be an admin to access this page",

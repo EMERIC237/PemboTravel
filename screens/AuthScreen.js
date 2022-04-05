@@ -166,13 +166,24 @@ const AuthScreen = (props) => {
             )}
           </View>
           <View style={styles.buttonContainer}>
-            <Button
-              title={`Switch to ${isSignedUp ? "sign up" : "login"}`}
-              color={Colors.accent}
-              onPress={() => {
-                setIsSignedUp((prevState) => !prevState);
-              }}
-            />
+            <View style={styles.button}>
+              <Button
+                title={`Switch to ${isSignedUp ? "sign up" : "login"}`}
+                color={Colors.accent}
+                onPress={() => {
+                  setIsSignedUp((prevState) => !prevState);
+                }}
+              />
+            </View>
+            <View>
+              <Button
+                title="Visit our projects"
+                color={Colors.primary}
+                onPress={() => {
+                  props.navigation.navigate("Projects");
+                }}
+              />
+            </View>
           </View>
         </ScrollView>
       </Card>

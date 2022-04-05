@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/actions/authActions";
@@ -20,13 +21,41 @@ const ProfileScreen = ({ navigation }) => {
   //get the user userInfos from the redux store
   const userInfos = useSelector((state) => state.user);
   const onLogoutHandler = () => {
+    // if the user is not logged in, he will be redirected to the login screen
+    if (!userId) {
+      navigation.navigate("Auth");
+      return;
+    }
     dispacth(logout());
     navigation.reset({
       index: 0,
       routes: [{ name: "ProjectsTab" }],
     });
   };
-
+  const onPressUpdateHandler = () => {
+    if (!userId) {
+      Alert.alert(
+        "No account available",
+        "You need to be logged in to update your profile",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+    navigation.navigate("Subscribe", { infos: userInfos });
+  };
+  const onPressPaymentHandler = () => {
+    if (!userId) {
+      Alert.alert(
+        "No account available",
+        "You need to be logged in to see your payments",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+    navigation.navigate("PaymentTab", {
+      screen: "DetailContribution",
+    });
+  };
   if (!userInfos) {
     return (
       <View>
@@ -58,48 +87,44 @@ const ProfileScreen = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.infoView}>
-          <Text style={styles.infoText}>First name: {userInfos.firstName}</Text>
-        </View>
-        <View style={styles.infoView}>
-          <Text style={styles.infoText}>Last name: {userInfos.lastName}</Text>
-        </View>
-        <View style={styles.infoView}>
           <Text style={styles.infoText}>
-            Your phone number: {userInfos.phone}
+            First name: {userInfos.firstName || "No first name yet"}
           </Text>
         </View>
         <View style={styles.infoView}>
-          <Text style={styles.infoText}>Your email: {userInfos.email}</Text>
+          <Text style={styles.infoText}>
+            Last name: {userInfos.lastName || "No last name yet"}
+          </Text>
+        </View>
+        <View style={styles.infoView}>
+          <Text style={styles.infoText}>
+            Your phone number: {userInfos.phone || "No Phone number yet"}
+          </Text>
+        </View>
+        <View style={styles.infoView}>
+          <Text style={styles.infoText}>
+            Your email: {userInfos.email || "No email yet"}
+          </Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable
-          disabled={userId === null}
-          onPress={() => {
-            navigation.navigate("PaymentTab", {
-              screen: "DetailContribution",
-            });
-          }}
-        >
+        <TouchableOpacity onPress={onPressPaymentHandler}>
           <Card style={styles.button}>
             <Text style={styles.buttonText}>See your payments Here</Text>
           </Card>
-        </Pressable>
-        <Pressable
-          disabled={userId === null}
-          onPress={() => {
-            navigation.navigate("Subscribe", { infos: userInfos });
-          }}
-        >
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressUpdateHandler}>
           <Card style={styles.button}>
             <Text style={styles.buttonText}>Change my informations</Text>
           </Card>
-        </Pressable>
-        <Pressable disabled={userId === null} onPress={onLogoutHandler}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onLogoutHandler}>
           <Card style={styles.button}>
-            <Text style={styles.buttonText}>Logout</Text>
+            <Text style={styles.buttonText}>
+              {userId ? "Logout" : "Login or Sign up here "}
+            </Text>
           </Card>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
