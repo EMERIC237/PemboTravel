@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeAdmin } from "../store/actions/userActions";
 import { deleteProject } from "../store/actions/projectActions";
+import { getAllPayments } from "../store/actions/paymentActions";
 
 const AdminScreen = ({ navigation }) => {
   const [adminEmail, setAdminEmail] = useState("");
@@ -23,16 +24,24 @@ const AdminScreen = ({ navigation }) => {
   const [selectedProject, setSelectedProject] = useState("");
   const [onDelete, setOnDelete] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.userCredentials);
+  const isAdmin = useSelector((state) => state.auth.userCredentials.isAdmin);
   const projects = useSelector((state) => state.projects.projects);
-  if (!user.isAdmin) {
+
+  if (!isAdmin) {
     Alert.alert(
       "Permission denied",
       "You need to be an admin to access this page",
       [{ text: "OK", onPress: () => navigation.navigate("PemboStack") }]
     );
   }
-
+  const validatePaymenHandler = async () => {
+    try {
+      await dispatch(getAllPayments());
+      navigation.navigate("Validate");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const makeAdminHandler = async () => {
     try {
       await dispatch(makeAdmin(adminEmail));
@@ -94,7 +103,7 @@ const AdminScreen = ({ navigation }) => {
           <Text style={styles.taskText}>Add a new admin ?</Text>
         </Card>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.task}>
+      <TouchableOpacity style={styles.task} onPress={validatePaymenHandler}>
         <Card style={styles.taskContainer}>
           <Text style={styles.taskText}> Validate a payment ?</Text>
         </Card>
@@ -125,11 +134,14 @@ const AdminScreen = ({ navigation }) => {
       </Modal>
       <PickerModal
         isOpen={pickerVisible}
+        onCancel={() => {
+          setPickerVisible(!pickerVisible);
+        }}
         onDone={updateProjectHandler}
         selectedValue={selectedProject}
         onValueChange={(value, index) => setSelectedProject(value)}
         itemsList={projects}
-        itemLabel="city"
+        itemLabel="projectName"
         itemValue="projectId"
         itemKeyValue="projectId"
       />

@@ -41,7 +41,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = (props) => {
-  const [isSignedUp, setIsSignedUp] = useState(false);
+  const [isSignedUp, setIsSignedUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
@@ -112,16 +112,11 @@ const AuthScreen = (props) => {
       return (
         <View>
           <Button
-            title="Sign Up with email"
+            title="Create an account here"
             onPress={() => {
               props.navigation.navigate("Subscribe");
             }}
           />
-          <Button
-            title="Sign Up with Google"
-            onPress={authHandler.bind(this, "google")}
-          />
-          <Button title="Sign Up with Facebook" onPress={authHandler} />
         </View>
       );
     }
@@ -135,30 +130,34 @@ const AuthScreen = (props) => {
     >
       <Card style={styles.authContainer}>
         <ScrollView>
-          <Input
-            id="email"
-            label="E-Mail"
-            keyboardType="email-address"
-            returnKeyType="done"
-            required
-            email
-            autoCapitalize="none"
-            errorText="Please enter a valid email address."
-            onInputChange={inputChangeHandler}
-            initialValue=""
-          />
-          <Input
-            id="password"
-            label="password"
-            keyboardType="default"
-            returnKeyType="done"
-            required
-            secureTextEntry
-            autoCapitalize="none"
-            errorText="Please enter a valid password."
-            onInputChange={inputChangeHandler}
-            initialValue=""
-          />
+          {isSignedUp ? (
+            <View>
+              <Input
+                id="email"
+                label="E-Mail"
+                keyboardType="email-address"
+                returnKeyType="done"
+                required
+                email
+                autoCapitalize="none"
+                errorText="Please enter a valid email address."
+                onInputChange={inputChangeHandler}
+                initialValue=""
+              />
+              <Input
+                id="password"
+                label="password"
+                keyboardType="default"
+                returnKeyType="done"
+                required
+                secureTextEntry
+                autoCapitalize="none"
+                errorText="Please enter a valid password."
+                onInputChange={inputChangeHandler}
+                initialValue=""
+              />
+            </View>
+          ) : null}
           <View style={styles.buttonContainer}>
             {isLoading ? (
               <ActivityIndicator size="small" color={Colors.primary} />
@@ -167,13 +166,24 @@ const AuthScreen = (props) => {
             )}
           </View>
           <View style={styles.buttonContainer}>
-            <Button
-              title={`Switch to ${isSignedUp ? "sign up" : "login"}`}
-              color={Colors.accent}
-              onPress={() => {
-                setIsSignedUp((prevState) => !prevState);
-              }}
-            />
+            <View style={styles.button}>
+              <Button
+                title={`Switch to ${isSignedUp ? "sign up" : "login"}`}
+                color={Colors.accent}
+                onPress={() => {
+                  setIsSignedUp((prevState) => !prevState);
+                }}
+              />
+            </View>
+            <View>
+              <Button
+                title="Visit our projects"
+                color={Colors.primary}
+                onPress={() => {
+                  props.navigation.navigate("Projects");
+                }}
+              />
+            </View>
           </View>
         </ScrollView>
       </Card>

@@ -1,4 +1,3 @@
-import ImageSelector from "../components/ImageSelector";
 import {
   StyleSheet,
   Text,
@@ -7,26 +6,26 @@ import {
   ScrollView,
   Button,
   Image,
+  Alert,
 } from "react-native";
-import React, { useCallback, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import ButtonImageSelector from "../components/extends/ButtonImageSelector";
+import ButtonImagePicker from "../components/extends/ButtonImagePicker";
 import Colors from "../constants/Colors";
-import { getAuth } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addPayment } from "../store/actions/paymentActions";
 import PickerModal from "../components/UI/PickerModal";
 
 const PaymentScreen = ({ route, navigation }) => {
   //get the amount value sent previously when calling the imageSelector and set it as a default state
-  const { amount: prevAmount, imageUri, projectId, projectName } = route.params;
+  const { projectId, projectName } = route.params;
   //get the current user
 
-  // TODO : Find a way to handle data commuication between screens more easy
-  const auth = getAuth();
-  const user = auth.currentUser;
-  const userId = user.uid;
-  const [amount, setAmount] = useState(prevAmount);
-  const [ontakenImage, setOnTakenImage] = useState(false);
+  // TODO : Find a way to handle data commuication between screens more easily
+  const userId = useSelector((state) => state.auth.userCredentials.userId);
+  const [amount, setAmount] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [image, setImage] = useState(null);
   const [selectedProject, setSelectedProject] = useState();
   const userProjects = useSelector((state) => state.projects.userProjects);
   const amountRef = useRef();
@@ -42,25 +41,14 @@ const PaymentScreen = ({ route, navigation }) => {
   };
 
   const savePaymentHandler = () => {
-    dispatch(addPayment(userId, projectId, imageUri, amount));
+    if (!amount || !image || !userId) {
+      Alert.alert("Error", "Please fill all the fields", [{ text: "Okay" }]);
+      return;
+    }
+    dispatch(addPayment(userId, projectId, projectName, image, amount));
     navigation.navigate("DetailContribution");
   };
 
-  if (ontakenImage) {
-    //set the amount value as a props so we can get it in the next render
-    return (
-      <ImageSelector
-        navigation={navigation}
-        amount={amount}
-        projectId={projectId || selectedProject}
-        userId={userId}
-        projectName={
-          projectName ||
-          userProjects.find((project) => project.id === selectedProject).city
-        }
-      />
-    );
-  }
   let HeadPage;
 
   if (projectId) {
@@ -76,12 +64,13 @@ const PaymentScreen = ({ route, navigation }) => {
     HeadPage = (
       <View style={styles.head}>
         <Text style={styles.headText}>
-          You don't have any cuurent project now. Please subscribe to one of our
+          You don't have any curent project now. Please subscribe to one of our
           beatiful projects{" "}
           <Text
             onPress={() => {
               navigation.navigate("ProjectsTab");
             }}
+            style={styles.link}
           >
             here{" "}
           </Text>
@@ -103,11 +92,15 @@ const PaymentScreen = ({ route, navigation }) => {
           {selectedProject
             ? userProjects.find(
                 (project) => project.projectId === selectedProject
-              ).city
+              ).projectName
             : "Select a project"}
         </Text>
         <PickerModal
           isOpen={modalVisible}
+          onCancel={() => {
+            setSelectedProject(undefined);
+            setModalVisible(!modalVisible);
+          }}
           onDone={() => {
             setModalVisible(!modalVisible);
           }}
@@ -134,34 +127,22 @@ const PaymentScreen = ({ route, navigation }) => {
           onChangeText={titleChangeHandler}
           value={amount}
         />
-        {imageUri && (
+        {image && (
           <View style={styles.imageContainer}>
-            {/* <Image
-              source={{
-                uri: imageUri,
-              }}
-              style={styles.image}
-            /> */}
-            {/*image use for demonstration*/}
             <Image
               source={{
-                uri: "https://cdn.britannica.com/22/187022-138-64E249E2/facts-paper-money.jpg?w=800&h=450&c=crop",
+                uri: image,
               }}
               style={styles.image}
             />
           </View>
         )}
         <View style={styles.buttonContainer}>
+          <ButtonImageSelector onPictureTaken={setImage} />
+          <Text>Or</Text>
+          <ButtonImagePicker onImageTaken={setImage} />
           <Button
-            title={imageUri ? "Take new picture" : "Take picture"}
-            onPress={() => {
-              setOnTakenImage((ontakenImage) => !ontakenImage);
-            }}
-            disabled={!amount && !imageUri}
-            style={styles.takePictureButton}
-          />
-
-          <Button
+            disabled={userId === null}
             title="Save payment"
             color={Colors.primary}
             onPress={savePaymentHandler}
@@ -202,6 +183,12 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  link: {
+    color: "#19b2e0",
+    fontWeight: "bold",
+    marginStart: 5,
+    textDecorationLine: "underline",
   },
   buttonContainer: {
     marginTop: 10,

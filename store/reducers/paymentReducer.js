@@ -1,36 +1,52 @@
-import { ADD_PAYMENT } from "../actions/paymentActions";
-import Payment from "../../models/payment";
+import {
+  ADD_PAYMENT,
+  SET_PAYMENTS,
+  GET_ALL_PAYMENTS,
+  UPDATE_PAYMENT_STATUS,
+} from "../actions/paymentActions";
 const initialState = {
+  allPayments: [],
   payments: [],
   verifiedPayments: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_PAYMENTS:
+      return {
+        payments: action.payments,
+        verifiedPayments: state.payments.filter(
+          (payment) => payment.status === "verified"
+        ),
+      };
     case ADD_PAYMENT:
-      //create a new id for the payment
-      const newId = Math.random().toString();
-      const payment = new Payment(
-        newId,
-        action.payload.paymentImg,
-        action.payload.amount
-      );
       return {
         ...state,
-        payments: [...state.payments, payment],
+        payments: [...state.payments, action.payload],
       };
-    // case VERIFY_PAYMENT:
-    //   return {
-    //     ...state,
-    //     verifiedPayments: [...state.verifiedPayments, action.payload],
-    //   };
-    // case DELETE_PAYMENT:
-    //   return {
-    //     ...state,
-    //     payments: state.payments.filter(
-    //       (payment) => payment.id !== action.payload
-    //     ),
-    //   };
+    case GET_ALL_PAYMENTS:
+      return {
+        ...state,
+        allPayments: action.payments,
+      };
+    case UPDATE_PAYMENT_STATUS:
+      const paymentsUpdater = (payments) => {
+        return payments.map((payment) => {
+          if (payment.paymentId === action.paymentId) {
+            return {
+              ...payment,
+              status: action.status,
+            };
+          }
+          return payment;
+        });
+      };
+      return {
+        ...state,
+        payments: paymentsUpdater(state.payments),
+        allPayments: paymentsUpdater(state.allPayments),
+        verifiedPayments: paymentsUpdater(state.verifiedPayments),
+      };
     default:
       return state;
   }

@@ -31,6 +31,12 @@ const PickerModal = (props) => {
         <View style={styles.modalView}>
           <View style={styles.doneView}>
             <Text
+              onPress={props.onCancel}
+              style={{ fontSize: 25, color: "green", textAlign: "center" }}
+            >
+              Cancel
+            </Text>
+            <Text
               onPress={props.onDone}
               style={{ fontSize: 25, color: "green", textAlign: "center" }}
             >
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    paddingVertical: 25,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -72,18 +78,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-  choiceTextStyle: {
-    fontSize: 20,
-    color: "green",
-    textAlign: "center",
-    textDecorationStyle: "solid",
-    textDecorationColor: "green",
-    textDecorationLine: "underline",
+    backgroundColor: "#e1dfe6",
   },
   doneView: {
+    flex: 1,
+    justifyContent: "space-between",
+    flexDirection: "row",
     position: "absolute",
     top: 10,
-    right: 10,
+    width: "100%",
   },
 });

@@ -2,14 +2,14 @@ import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createProject, updateProject } from "../store/actions/projectActions";
-import * as ImagePicker from "expo-image-picker";
+import ButtonImagePicker from "../components/extends/ButtonImagePicker";
 const CreateProjectsScreen = ({ route, navigation }) => {
   const projectId = route.params ? route.params.projectId : null;
   const currentProject = useSelector((state) =>
     state.projects.projects.find((project) => project.projectId === projectId)
   );
   const {
-    city: currentName,
+    projectName: currentName,
     description: currentDescription,
     imageUrl: currentImage,
     price: currentPrice,
@@ -20,19 +20,6 @@ const CreateProjectsScreen = ({ route, navigation }) => {
   const [price, setPrice] = useState(currentPrice || "");
   const [image, setImage] = useState(currentImage || null);
   const dispatch = useDispatch();
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
 
   const saveProjectHandler = () => {
     currentProject
@@ -67,9 +54,7 @@ const CreateProjectsScreen = ({ route, navigation }) => {
         returnKeyType="done"
         style={styles.input}
       />
-      <View style={styles.buttonContainer}>
-        <Button title="upload Images" onPress={pickImage} />
-      </View>
+      <ButtonImagePicker onImageTaken={setImage} />
       <View style={styles.imageContainer}>
         {image && (
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
@@ -102,9 +87,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-const screenOptions = (navData) => {
-  return {
-    headerTitle: "Create a new Project",
-    headerL,
-  };
-};
