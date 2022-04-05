@@ -21,7 +21,7 @@ const ValidateScreen = () => {
 
     return {
       ...payment,
-      projectName: project ? project.city : "Pembo",
+      projectName: project ? project.projectName : "Pembo",
     };
   });
   if (paymentsWithProjectName.length === 0) {

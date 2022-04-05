@@ -1,17 +1,24 @@
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/actions/authActions";
+import Card from "../components/UI/Card";
 import React, { useEffect, useState } from "react";
 
 //* The information here are coming from the phone's database
 //* so only the user of the phone can acces his informations here
 const ProfileScreen = ({ navigation }) => {
+  //Get the user ID from the redux store
+  const userId = useSelector((state) => state.auth.userCredentials.userId);
   const dispacth = useDispatch();
   //get the user userInfos from the redux store
-  const userInfos = useSelector((state) => {
-    return state.user;
-  });
-  console.log({ userInfos });
+  const userInfos = useSelector((state) => state.user);
   const onLogoutHandler = () => {
     dispacth(logout());
     navigation.reset({
@@ -33,19 +40,21 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.infoContainer}>
         <View style={{ ...styles.infoView, ...styles.picture }}>
           <Text style={styles.infoText}>
-            Your picture:{" "}
+            Your picture:
             <Text>{userInfos.picture ? null : "Not picture yet"}</Text>
           </Text>
 
           <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri: userInfos.picture,
-              }}
-              resizeMethod="resize"
-              resizeMode="center"
-              style={styles.image}
-            />
+            {userInfos.picture ? (
+              <Image
+                source={{
+                  uri: userInfos.picture,
+                }}
+                resizeMethod="resize"
+                resizeMode="center"
+                style={styles.image}
+              />
+            ) : null}
           </View>
         </View>
         <View style={styles.infoView}>
@@ -64,27 +73,33 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          title="See your payments Here"
+        <Pressable
+          disabled={userId === null}
           onPress={() => {
             navigation.navigate("PaymentTab", {
               screen: "DetailContribution",
             });
           }}
-          style={styles.button}
-        />
-        <Button
-          title="Change my informations"
+        >
+          <Card style={styles.button}>
+            <Text style={styles.buttonText}>See your payments Here</Text>
+          </Card>
+        </Pressable>
+        <Pressable
+          disabled={userId === null}
           onPress={() => {
             navigation.navigate("Subscribe", { infos: userInfos });
           }}
-          style={styles.button}
-        />
-        <Button
-          onPress={onLogoutHandler}
-          title="Logout"
-          style={styles.button}
-        />
+        >
+          <Card style={styles.button}>
+            <Text style={styles.buttonText}>Change my informations</Text>
+          </Card>
+        </Pressable>
+        <Pressable disabled={userId === null} onPress={onLogoutHandler}>
+          <Card style={styles.button}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </Card>
+        </Pressable>
       </View>
     </View>
   );
@@ -123,11 +138,20 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   buttonContainer: {
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
+    flex: 1,
   },
   button: {
-    margin: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#348ceb",
+    padding: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   image: {
     width: 200,

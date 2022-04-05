@@ -29,10 +29,10 @@ export default (state = initialState, action) => {
         if (project.id === action.payload.projectId) {
           const updatedProject = {
             ...project,
-            city: action.payload.city,
+            projectName: action.payload.projectName,
             description: action.payload.description,
             price: action.payload.price,
-            imageUrl: action.payload.imageUrl,
+            projectImg: action.payload.projectImg,
           };
           return updatedProject;
         }

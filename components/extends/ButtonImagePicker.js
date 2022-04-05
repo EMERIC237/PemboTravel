@@ -3,15 +3,15 @@ import * as ImagePicker from "expo-image-picker";
 import React from "react";
 
 /**
- * 
- * @param {*} props 
- * @required {function} onImageTaken
+ *
+ * @param {*} props
+ * @required {function} onImageTaken to be called when the user chooses an image
  * @returns a button that opens the image picker
  */
 const ButtonImagePicker = (props) => {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,

@@ -50,14 +50,14 @@ const SubscriptionScreen = ({ route, navigation }) => {
     inputValues: {
       firstName: infos ? infos.firstName : "",
       lastName: infos ? infos.lastName : "",
-      phoneNumber: infos ? infos.phone : "",
+      phone: infos ? infos.phone : "",
       email: infos ? infos.email : "",
       password: "",
     },
     inputValidities: {
       firstName: infos ? true : false,
       lastName: infos ? true : false,
-      phoneNumber: infos ? true : false,
+      phone: infos ? true : false,
       email: infos ? true : false,
       password: infos ? true : false,
     },
@@ -76,7 +76,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
           infos.id,
           formState.inputValues.firstName,
           formState.inputValues.lastName,
-          formState.inputValues.phoneNumber,
+          formState.inputValues.phone,
           formState.inputValues.email,
           image
         )
@@ -90,7 +90,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
         formState.inputValues.password,
         formState.inputValues.lastName,
         formState.inputValues.firstName,
-        formState.inputValues.phoneNumber,
+        formState.inputValues.phone,
         projectId
       )
     );
@@ -140,7 +140,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
               initiallyValid={!!infos}
             />
             <Input
-              id="phoneNumber"
+              id="phone"
               label="Phone number"
               errorText="Please enter a valid number"
               keyboardType="phone-pad"

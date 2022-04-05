@@ -7,9 +7,10 @@ import {
   ScrollView,
   Button,
   Image,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useCallback, useState, useRef, useEffect } from "react";
+
 import Colors from "../constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { addPayment } from "../store/actions/paymentActions";
@@ -40,12 +41,19 @@ const PaymentScreen = ({ route, navigation }) => {
   };
 
   const savePaymentHandler = () => {
-    if(!amount || !imageUri || !userId) {
+    if (!amount || !imageUri || !userId) {
       Alert.alert("Error", "Please fill all the fields", [{ text: "Okay" }]);
       return;
     }
     dispatch(addPayment(userId, projectId, imageUri, amount));
     navigation.navigate("DetailContribution");
+  };
+  const takeImageHandler = () => {
+    if (!projectName) {
+      Alert.alert("Error", "Please select a project first", [{ text: "Okay" }]);
+      return;
+    }
+    setOnTakenImage((ontakenImage) => !ontakenImage);
   };
 
   if (ontakenImage) {
@@ -58,7 +66,7 @@ const PaymentScreen = ({ route, navigation }) => {
         userId={userId}
         projectName={
           projectName ||
-          userProjects.find((project) => project.id === selectedProject).city
+          userProjects.find((project) => project.id === selectedProject).projectName
         }
       />
     );
@@ -106,7 +114,7 @@ const PaymentScreen = ({ route, navigation }) => {
           {selectedProject
             ? userProjects.find(
                 (project) => project.projectId === selectedProject
-              ).city
+              ).projectName
             : "Select a project"}
         </Text>
         <PickerModal
@@ -143,16 +151,9 @@ const PaymentScreen = ({ route, navigation }) => {
         />
         {imageUri && (
           <View style={styles.imageContainer}>
-            {/* <Image
-              source={{
-                uri: imageUri,
-              }}
-              style={styles.image}
-            /> */}
-            {/*image use for demonstration*/}
             <Image
               source={{
-                uri: "https://cdn.britannica.com/22/187022-138-64E249E2/facts-paper-money.jpg?w=800&h=450&c=crop",
+                uri: imageUri,
               }}
               style={styles.image}
             />
@@ -161,14 +162,13 @@ const PaymentScreen = ({ route, navigation }) => {
         <View style={styles.buttonContainer}>
           <Button
             title={imageUri ? "Take new picture" : "Take picture"}
-            onPress={() => {
-              setOnTakenImage((ontakenImage) => !ontakenImage);
-            }}
+            onPress={takeImageHandler}
             disabled={!amount && !imageUri}
             style={styles.takePictureButton}
           />
 
           <Button
+            disabled={userId === null}
             title="Save payment"
             color={Colors.primary}
             onPress={savePaymentHandler}

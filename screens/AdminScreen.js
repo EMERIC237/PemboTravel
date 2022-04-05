@@ -141,7 +141,7 @@ const AdminScreen = ({ navigation }) => {
         selectedValue={selectedProject}
         onValueChange={(value, index) => setSelectedProject(value)}
         itemsList={projects}
-        itemLabel="city"
+        itemLabel="projectName"
         itemValue="projectId"
         itemKeyValue="projectId"
       />

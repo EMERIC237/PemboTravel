@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { Camera, takePic } from "expo-camera";
-import { Ionicons } from "@expo/vector-icons";
 
 const ImageSelector = (props) => {
   const [hasPermission, setHasPermission] = useState(null);

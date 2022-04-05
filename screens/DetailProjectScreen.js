@@ -25,7 +25,7 @@ const DetailProjectScreen = ({ route, navigation }) => {
             params: {
               projectId,
               userId,
-              projectName: selectedProject.city,
+              projectName: selectedProject.projectName,
             },
           });
         }}
@@ -47,12 +47,12 @@ const DetailProjectScreen = ({ route, navigation }) => {
     <View style={styles.screen}>
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: selectedProject.imageUrl }}
+          source={{ uri: selectedProject.projectImg }}
           style={styles.image}
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>{selectedProject.city}</Text>
+        <Text style={styles.text}>{selectedProject.projectName}</Text>
         <Text style={styles.text}>Price: {selectedProject.price}</Text>
         <Text style={styles.text}>{selectedProject.description}</Text>
       </View>

@@ -106,11 +106,6 @@ const PaymentsGridTile = (props) => {
         )}
       >
         <View style={styles.contributionContainer}>
-          {/* <Image
-                  source={{ uri: data.item.imageUrl }}
-                  style={styles.imgPayment}
-                /> */}
-          {/*image use for demonstration*/}
           <DoubleTap
             style={styles.detailImgItem}
             onDoubleTap={() => {
@@ -119,17 +114,10 @@ const PaymentsGridTile = (props) => {
             delay={400}
           >
             <View>
-              {/* <Image
+              <Image
                   source={{ uri: data.item.imageUrl }}
                   style={styles.imgPayment}
-                /> */}
-              {/*image use for demonstration*/}
-              <Image
-                source={{
-                  uri: "https://cdn.britannica.com/22/187022-138-64E249E2/facts-paper-money.jpg?w=800&h=450&c=crop",
-                }}
-                style={styles.imgPayment}
-              />
+                />
             </View>
           </DoubleTap>
           <View style={styles.extraContainer}>

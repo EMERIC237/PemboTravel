@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createProject, updateProject } from "../store/actions/projectActions";
-import * as ImagePicker from "expo-image-picker";
 import ButtonImagePicker from "../components/extends/ButtonImagePicker";
 const CreateProjectsScreen = ({ route, navigation }) => {
   const projectId = route.params ? route.params.projectId : null;
@@ -10,7 +9,7 @@ const CreateProjectsScreen = ({ route, navigation }) => {
     state.projects.projects.find((project) => project.projectId === projectId)
   );
   const {
-    city: currentName,
+    projectName: currentName,
     description: currentDescription,
     imageUrl: currentImage,
     price: currentPrice,
@@ -21,19 +20,6 @@ const CreateProjectsScreen = ({ route, navigation }) => {
   const [price, setPrice] = useState(currentPrice || "");
   const [image, setImage] = useState(currentImage || null);
   const dispatch = useDispatch();
-
-  // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
 
   const saveProjectHandler = () => {
     currentProject
@@ -101,8 +87,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-const screenOptions = (navData) => {
-  return {
-    headerTitle: "Create a new Project",
-  };
-};

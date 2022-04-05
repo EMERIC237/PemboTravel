@@ -1,12 +1,10 @@
 import {
   StyleSheet,
   Text,
-  View,
   FlatList,
   ImageBackground,
   TouchableOpacity,
   SafeAreaView,
-  Button,
 } from "react-native";
 import { useCallback } from "react";
 const ProjectsGridTile = ({ dataList, navigation }) => {
@@ -17,16 +15,16 @@ const ProjectsGridTile = ({ dataList, navigation }) => {
         onPress={() => {
           navigation.navigate("Details", {
             projectId: data.item.projectId,
-            projectName: data.item.city,
+            projectName: data.item.projectName,
           });
         }}
       >
         <ImageBackground
           imageStyle={{ borderRadius: 6 }}
-          source={{ uri: data.item.imageUrl }}
+          source={{ uri: data.item.projectImg }}
           style={styles.image}
         >
-          <Text style={styles.cityText}> {data.item.city}</Text>
+          <Text style={styles.cityText}> {data.item.projectName}</Text>
         </ImageBackground>
       </TouchableOpacity>
     );
@@ -55,8 +53,8 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   image: {
-    width: 300,
-    height: 100,
+    width: 350,
+    height: 150,
     justifyContent: "center",
     borderRadius: 5,
   },

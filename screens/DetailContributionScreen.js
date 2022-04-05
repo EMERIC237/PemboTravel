@@ -14,7 +14,7 @@ const DetailContributionScreen = ({ navigation }) => {
 
     return {
       ...payment,
-      projectName: project ? project.city : "Pembo",
+      projectName: project ? project.projectName : "Pembo",
     };
   });
 

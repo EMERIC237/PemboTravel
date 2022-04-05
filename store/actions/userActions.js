@@ -24,27 +24,27 @@ export const setUser = () => {
   return async (dispatch, getState) => {
     try {
       let userInfos = {};
-      let querySnapshot = {};
+      // get the user id
+      const userId = getState().auth.userCredentials.userId;
       const user = await fetchInfos();
       //if we don't get the user from the phone storage, we get it from the database
-      if (!user) {
-        // get the user id
-        const userId = getState().auth.userCredentials.userId;
-        const userRef = doc(db, "users", userId);
-        querySnapshot = await getDoc(userRef);
-      } else {
-        querySnapshot = user;
+      if (user) {
+        userInfos = user;
       }
-      userInfos = querySnapshot.data();
+      const userRef = doc(db, "users", userId);
+      const querySnapshot = await getDoc(userRef);
+      if (querySnapshot.exists()) {
+        userInfos = querySnapshot.data();
+      }
       dispatch({
         type: SET_USER,
         payload: {
           id: userId,
-          firstName: userInfos.firstName,
-          lastName: userInfos.lastName,
-          email: userInfos,
-          phone: userInfos.phoneNumber,
-          picture: userInfos.picture || "",
+          firstName: userInfos.firstName ? userInfos.firstName : "",
+          lastName: userInfos.lastName ? userInfos.lastName : "",
+          email: userInfos.email ? userInfos.email : "",
+          phone: userInfos.phone ? userInfos.phone : "",
+          picture: userInfos.picture ? userInfos.picture : "",
         },
       });
     } catch (error) {
@@ -58,7 +58,7 @@ export const updateUser = (
   userId,
   firstName,
   lastName,
-  phoneNumber,
+  phone,
   email,
   picture
 ) => {
@@ -70,7 +70,7 @@ export const updateUser = (
       await updateDoc(userRef, {
         firstName: firstName,
         lastName: lastName,
-        phoneNumber: phoneNumber,
+        phone: phone,
         email: email,
         picture: picture,
       });
@@ -79,7 +79,7 @@ export const updateUser = (
         firstName,
         lastName,
         email,
-        phoneNumber,
+        phone,
         (address = ""),
         picture
       );
@@ -89,7 +89,7 @@ export const updateUser = (
           userId,
           firstName,
           lastName,
-          phoneNumber,
+          phone,
           email,
           picture,
         },

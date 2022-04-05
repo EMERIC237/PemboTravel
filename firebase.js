@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import {LogBox} from "react-native"
 import { getAuth, initializeAuth } from "firebase/auth";
 import { getReactNativePersistence } from "firebase/auth/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -31,6 +32,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// Firebase sets some timers for a long period, which will trigger some warnings. Let's turn that off
+LogBox.ignoreLogs([`Setting a timer for a long period`]);
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const functions = getFunctions(app);

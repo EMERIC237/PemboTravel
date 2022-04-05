@@ -8,7 +8,10 @@ const UserProjectScreen = ({ navigation }) => {
   if (!userProjects.length) {
     return (
       <View style={styles.screen}>
-        <Text style={{ fontSize: 30 }}>No projects yet</Text>
+        <Text style={{ fontSize: 18 }}>
+          You don't have any project yet, please subscribe to one of our project
+          by tapping on the project picture to see it here!
+        </Text>
       </View>
     );
   }

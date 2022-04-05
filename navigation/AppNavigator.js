@@ -34,7 +34,11 @@ const AdminStackNavigator = () => {
         component={CreateProjectsScreen}
         options={{ headerShown: true, headerTitle: "Add Project" }}
       />
-      <AdminStack.Screen name="Validate" component={ValidateScreen} />
+      <AdminStack.Screen
+        name="Validate"
+        component={ValidateScreen}
+        options={{ headerShown: true, headerTitle: "Validate Projects" }}
+      />
     </AdminStack.Navigator>
   );
 };
@@ -44,7 +48,12 @@ const ProjectStackNavigator = () => {
   return (
     <ProjectStack.Navigator
       initialRouteName="Splash"
-      screenOptions={defaultNavOptions}
+      screenOptions={({ navigation }) => ({
+        headerStyle: {
+          backgroundColor: Platform.OS === "android" ? "" : Colors.primary,
+        },
+        headerTintColor: Platform.OS === "android" ? Colors.primary : "white",
+      })}
     >
       <ProjectStack.Screen
         name="Splash"
@@ -54,18 +63,56 @@ const ProjectStackNavigator = () => {
       <ProjectStack.Screen
         name="Auth"
         component={AuthScreen}
-        options={{ headerTitle: "Authenticate" }}
+        options={{
+          headerTitle: "Welcome To Pembo Travel!",
+        }}
       />
       <ProjectStack.Screen
         name="Projects"
         component={ProjectsScreen}
-        options={{ title: "All our projects" }}
+        options={({ navigation }) => ({
+          title: "All our projects",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.toggleDrawer();
+              }}
+            >
+              <Ionicons name="menu" size={26} color="white" />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("userProjects");
+              }}
+            >
+              <MaterialCommunityIcons
+                name="playlist-check"
+                size={26}
+                color="white"
+                style={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
+          ),
+        })}
       />
 
       <ProjectStack.Screen
         name="userProjects"
         component={UserProjectScreen}
-        options={{ title: "My Projects projects" }}
+        options={({ navigation }) => ({
+          title: "My Projects",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Ionicons name="ios-arrow-back" size={25} color="white" />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <ProjectStack.Screen
         name="Details"
@@ -90,6 +137,7 @@ const DrawerNavigator = () => {
     <AppDrawer.Navigator
       initialRouteName="PemboStack"
       screenOptions={{
+        headerShown: false,
         headerStyle: { backgroundColor: Colors.primary },
         headerTintColor: "white",
         drawerActiveBackgroundColor: "#f0e1f0",
@@ -100,6 +148,7 @@ const DrawerNavigator = () => {
         name="AdminStack"
         component={AdminStackNavigator}
         options={{
+          headerShown: true,
           headerTitle: "Admin Only!",
           drawerLabel: "Admin",
           drawerIcon: ({ color, size }) => (

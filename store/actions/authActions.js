@@ -1,6 +1,5 @@
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { insertInfos } from "../../utils/database";
 import {
   createUserWithEmailAndPassword,
@@ -18,7 +17,7 @@ let timer;
  * @param {string} password
  * @param {string} lastName
  * @param {string} firstName
- * @param {string} phoneNumber
+ * @param {string} phone
  * @returns a dispatch function that will be called by the redux thun and return an action object
  */
 export const signup = (
@@ -26,7 +25,7 @@ export const signup = (
   password,
   lastName,
   firstName,
-  phoneNumber,
+  phone,
   projectId
 ) => {
   return async (dispacth) => {
@@ -41,16 +40,16 @@ export const signup = (
         {
           lastName,
           firstName,
-          phoneNumber,
+          phone,
         }
       );
-      await insertInfos(firstName, lastName, email, phoneNumber);
+      await insertInfos(firstName, lastName, email, phone);
+      const user = userCredentials.user;
       dispacth({
         type: AUTHENTICATE,
         payload: {
-          token: userCredentials._tokenResponse.idToken,
-          localId: userCredentials._tokenResponse.localId,
-          userId: userCredentials.user.uid,
+          userId: user.uid,
+          isAdmin: false,
         },
       });
     } catch (error) {
@@ -76,17 +75,15 @@ export const login = (email, password) => {
         email,
         password
       );
-      let paytest = {
-        token: userCredentials._tokenResponse.idToken,
-        localId: userCredentials._tokenResponse.localId,
-        userId: userCredentials.user.uid,
-      };
+      const user = userCredentials.user;
+      const checkIsAdmin = await user.getIdTokenResult();
+      user.isAdmin = checkIsAdmin.claims.admin;
+
       dispacth({
         type: AUTHENTICATE,
         payload: {
-          token: userCredentials._tokenResponse.idToken,
-          localId: userCredentials._tokenResponse.localId,
-          userId: userCredentials.user.uid,
+          userId: user.uid,
+          isAdmin: user.isAdmin,
         },
       });
     } catch (error) {
@@ -104,14 +101,6 @@ export const login = (email, password) => {
   };
 };
 
-/**
- * This function is use to authenticate(sign in on sign up )on the device
- * The function will dispatch to action : the setLogoutTimer which will set a timer
- * to expire the token after the expire date is passed
- * @param {string} userId
- * @param {string} token
- * @returns an action object that will be used on the reducer function
- */
 export const authenticate = (user) => {
   return async (dispacth) => {
     dispacth({
@@ -124,52 +113,11 @@ export const authenticate = (user) => {
   };
 };
 
-/**
- *  function to save the token on the device
- * @param {string} token
- * @param {string} userId
- * @param {date object} onExpiration
- * @implements AsyncStorage
- */
-const saveDataToStorage = async (token, userId, onExpiration) => {
-  try {
-    await AsyncStorage.setItem(
-      "userData",
-      JSON.stringify({
-        token,
-        userId,
-        expiryDate: onExpiration.toISOString(),
-      })
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
-const clearLogoutTimer = () => {
-  if (timer) {
-    clearTimeout(timer);
-  }
-};
-/**
- *
- * This function is use to setup a timer for the token
- * @param {date object} expirationTime
- * @returns a dispacth funtion
- */
-const setLogoutTimer = (expirationTime) => {
-  return (dispatch) => {
-    timer = setTimeout(() => {
-      dispatch(logout());
-    }, expirationTime);
-  };
-};
-
 export const logout = () => {
   return async (dispacth) => {
     try {
       await signOut(auth);
       dispacth({ type: LOGOUT });
-      clearLogoutTimer();
     } catch (error) {
       console.log(error);
     }

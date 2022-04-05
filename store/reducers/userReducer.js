@@ -14,12 +14,12 @@ export default (state = initialState, action) => {
     case SET_USER:
       return {
         ...state,
-        ...action.payload.user,
+        ...action.payload,
       };
     case UPDATE_USER:
       return {
         ...state,
-        user: { ...state.user, ...action.payload },
+        user: { ...state, ...action.payload },
       };
     default:
       return state;

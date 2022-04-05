@@ -9,7 +9,7 @@ import {
   getDocs,
   getDocsFromCache,
 } from "firebase/firestore";
-import Project from "../../models/project";
+import uploadImageAsync from "../../utils/uploadImage";
 export const CREATE_PROJECT = "CREATE_PROJECT";
 export const UPDATE_PROJECT = "UPDATE_PROJECT";
 export const DELETE_PROJECT = "DELETE_PROJECT";
@@ -51,16 +51,22 @@ export const setProjets = () => {
 export const createProject = (projectName, description, price, projectImg) => {
   return async (dispatch) => {
     try {
-      const projectToAdd = new Project(
-        [],
-        projectName,
+      //Upload the image to firebase storage using blob
+      const imageUrl = await uploadImageAsync(
         projectImg,
-        price,
-        description,
-        serverTimestamp()
+        `projects/${projectName}`
       );
-      const { ...projectObj } = projectToAdd;
-      const project = await addDoc(collection(db, "projects"), projectObj);
+      //define the structure of the project to be added
+      const projectToAdd = {
+        projectName,
+        description,
+        price,
+        projectImg: imageUrl,
+        contributors: [],
+        createdAt: serverTimestamp(),
+      };
+      console.log(projectToAdd);
+      const project = await addDoc(collection(db, "projects"), projectToAdd);
       dispatch({
         type: CREATE_PROJECT,
         payload: { ...projectToAdd, projectId: project.id },
@@ -92,19 +98,19 @@ export const updateProject = (
     try {
       const projectRef = doc(db, "projects", projectId);
       await updateDoc(projectRef, {
-        city: projectName,
+        projectName: projectName,
         description: description,
         price: price,
-        imageUrl: projectImg,
+        projectImg: projectImg,
       });
       dispatch({
         type: UPDATE_PROJECT,
         payload: {
           projectId: projectId,
-          city: projectName,
-          description: description,
-          price: price,
-          imageUrl: projectImg,
+          projectName,
+          description,
+          price,
+          projectImg,
         },
       });
     } catch (error) {
