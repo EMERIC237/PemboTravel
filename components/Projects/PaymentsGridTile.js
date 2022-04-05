@@ -23,6 +23,7 @@ const flexCenter = {
 
 const PaymentsGridTile = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [image, setImage] = useState(null);
   const { isValidating, onValidatePress, onRefusePress } = props;
   const getProperties = (status) => {
     let properties = {
@@ -109,15 +110,16 @@ const PaymentsGridTile = (props) => {
           <DoubleTap
             style={styles.detailImgItem}
             onDoubleTap={() => {
+              setImage(data.item.paymentImg);
               setModalVisible(!modalVisible);
             }}
             delay={400}
           >
             <View>
               <Image
-                  source={{ uri: data.item.imageUrl }}
-                  style={styles.imgPayment}
-                />
+                source={{ uri: data.item.paymentImg }}
+                style={styles.imgPayment}
+              />
             </View>
           </DoubleTap>
           <View style={styles.extraContainer}>
@@ -165,11 +167,7 @@ const PaymentsGridTile = (props) => {
               X
             </Text>
           </View>
-          <PinchableImage
-            imageUri={
-              "https://cdn.britannica.com/22/187022-138-64E249E2/facts-paper-money.jpg?w=800&h=450&c=crop"
-            }
-          />
+          <PinchableImage imageUri={image} />
           <View>
             <Text style={styles.modalText}>Zoom and explore the image</Text>
           </View>
@@ -284,7 +282,7 @@ const styles = StyleSheet.create({
   },
   projectContainer: {
     ...flexCenter,
-    flex: 0.3,
+    flex: 0.4,
     width: "100%",
     borderColor: "#ccc",
     borderTopWidth: 1,

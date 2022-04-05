@@ -91,6 +91,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
         formState.inputValues.lastName,
         formState.inputValues.firstName,
         formState.inputValues.phone,
+        image,
         projectId
       )
     );

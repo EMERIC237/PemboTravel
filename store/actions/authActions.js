@@ -1,6 +1,7 @@
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { insertInfos } from "../../utils/database";
+import uploadImageAsync from "../../utils/uploadImage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -26,6 +27,7 @@ export const signup = (
   lastName,
   firstName,
   phone,
+  userImg,
   projectId
 ) => {
   return async (dispacth) => {
@@ -35,15 +37,25 @@ export const signup = (
         email,
         password
       );
+      let imageUrl = null;
+      //upload the image to firebase storage using blob
+      if (userImg) {
+        imageUrl = await uploadImageAsync(
+          userImg,
+          `users/${userCredentials.user.uid}`
+        );
+      }
       const response = await setDoc(
         doc(db, "users", userCredentials.user.uid),
         {
-          lastName,
           firstName,
+          lastName,
+          email,
           phone,
+          userImg: imageUrl,
         }
       );
-      await insertInfos(firstName, lastName, email, phone);
+      await insertInfos(firstName, lastName, email, phone, "", imageUrl);
       const user = userCredentials.user;
       dispacth({
         type: AUTHENTICATE,

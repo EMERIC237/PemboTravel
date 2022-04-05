@@ -12,6 +12,7 @@ import {
   getDocs,
   getDocsFromCache,
 } from "firebase/firestore";
+import uploadImageAsync from "../../utils/uploadImage";
 // Add payment function
 export const ADD_PAYMENT = "ADD_PAYMENT";
 export const SET_PAYMENTS = "SET_PAYMENTS";
@@ -27,18 +28,30 @@ export const UPDATE_PAYMENT_STATUS = "UPDATE_PAYMENT_STATUS";
  * @param {string} amount
  * @returns a dispatch function that will be called by the redux thunk and return an action object
  */
-export const addPayment = (userId,projectName, projectId, paymentImg, amount) => {
+
+export const addPayment = (
+  userId,
+  projectId,
+  projectName,
+  paymentImg,
+  amount
+) => {
   return async (dispatch, getState) => {
     try {
       //get the current project
       const project = getState().projects.projects.find(
         (project) => project.projectId === projectId
       );
+      //Upload the image to firebase storage using blob
+      const imageUrl = await uploadImageAsync(
+        paymentImg,
+        `payments/${projectName}`
+      );
       const paymentToAdd = {
         userId,
         projectId,
         projectName,
-        paymentImg,
+        paymentImg: imageUrl,
         amount,
         status: "pending",
         createdAt: serverTimestamp(),
@@ -118,9 +131,9 @@ export const getAllPayments = () => {
 //function to update payment status
 /**
  * Function to update payment status to verified or rejected
- * @param {*} paymentId 
- * @param {*} status 
- * @returns 
+ * @param {*} paymentId
+ * @param {*} status
+ * @returns
  */
 export const updatePaymentStatus = (paymentId, status) => {
   return async (dispatch) => {
@@ -139,4 +152,4 @@ export const updatePaymentStatus = (paymentId, status) => {
       throw new Error(error.message);
     }
   };
-}
+};

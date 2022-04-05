@@ -65,7 +65,6 @@ export const createProject = (projectName, description, price, projectImg) => {
         contributors: [],
         createdAt: serverTimestamp(),
       };
-      console.log(projectToAdd);
       const project = await addDoc(collection(db, "projects"), projectToAdd);
       dispatch({
         type: CREATE_PROJECT,

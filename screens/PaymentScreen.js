@@ -41,11 +41,11 @@ const PaymentScreen = ({ route, navigation }) => {
   };
 
   const savePaymentHandler = () => {
-    if (!amount || !imageUri || !userId) {
+    if (!amount || !image || !userId) {
       Alert.alert("Error", "Please fill all the fields", [{ text: "Okay" }]);
       return;
     }
-    dispatch(addPayment(userId, projectId, projectName, imageUri, amount));
+    dispatch(addPayment(userId, projectId, projectName, image, amount));
     navigation.navigate("DetailContribution");
   };
 
@@ -140,7 +140,7 @@ const PaymentScreen = ({ route, navigation }) => {
         <View style={styles.buttonContainer}>
           <ButtonImageSelector onPictureTaken={setImage} />
           <Text>Or</Text>
-          <ButtonImagePicker onPictureTaken={setImage} />
+          <ButtonImagePicker onImageTaken={setImage} />
           <Button
             disabled={userId === null}
             title="Save payment"
