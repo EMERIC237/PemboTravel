@@ -1,4 +1,3 @@
-import ImageSelector from "../components/extends/ImageSelector";
 import {
   StyleSheet,
   Text,
@@ -9,8 +8,9 @@ import {
   Image,
   Alert,
 } from "react-native";
-import React, { useCallback, useState, useRef, useEffect } from "react";
-
+import React, { useState, useRef, useEffect } from "react";
+import ButtonImageSelector from "../components/extends/ButtonImageSelector";
+import ButtonImagePicker from "../components/extends/ButtonImagePicker";
 import Colors from "../constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { addPayment } from "../store/actions/paymentActions";
@@ -18,14 +18,14 @@ import PickerModal from "../components/UI/PickerModal";
 
 const PaymentScreen = ({ route, navigation }) => {
   //get the amount value sent previously when calling the imageSelector and set it as a default state
-  const { amount: prevAmount, imageUri, projectId, projectName } = route.params;
+  const { projectId, projectName } = route.params;
   //get the current user
 
-  // TODO : Find a way to handle data commuication between screens more easy
+  // TODO : Find a way to handle data commuication between screens more easily
   const userId = useSelector((state) => state.auth.userCredentials.userId);
-  const [amount, setAmount] = useState(prevAmount);
-  const [ontakenImage, setOnTakenImage] = useState(false);
+  const [amount, setAmount] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [image, setImage] = useState(null);
   const [selectedProject, setSelectedProject] = useState();
   const userProjects = useSelector((state) => state.projects.userProjects);
   const amountRef = useRef();
@@ -45,32 +45,10 @@ const PaymentScreen = ({ route, navigation }) => {
       Alert.alert("Error", "Please fill all the fields", [{ text: "Okay" }]);
       return;
     }
-    dispatch(addPayment(userId, projectId, imageUri, amount));
+    dispatch(addPayment(userId, projectId, projectName, imageUri, amount));
     navigation.navigate("DetailContribution");
   };
-  const takeImageHandler = () => {
-    if (!projectName) {
-      Alert.alert("Error", "Please select a project first", [{ text: "Okay" }]);
-      return;
-    }
-    setOnTakenImage((ontakenImage) => !ontakenImage);
-  };
 
-  if (ontakenImage) {
-    //set the amount value as a props so we can get it in the next render
-    return (
-      <ImageSelector
-        navigation={navigation}
-        amount={amount}
-        projectId={projectId || selectedProject}
-        userId={userId}
-        projectName={
-          projectName ||
-          userProjects.find((project) => project.id === selectedProject).projectName
-        }
-      />
-    );
-  }
   let HeadPage;
 
   if (projectId) {
@@ -149,24 +127,20 @@ const PaymentScreen = ({ route, navigation }) => {
           onChangeText={titleChangeHandler}
           value={amount}
         />
-        {imageUri && (
+        {image && (
           <View style={styles.imageContainer}>
             <Image
               source={{
-                uri: imageUri,
+                uri: image,
               }}
               style={styles.image}
             />
           </View>
         )}
         <View style={styles.buttonContainer}>
-          <Button
-            title={imageUri ? "Take new picture" : "Take picture"}
-            onPress={takeImageHandler}
-            disabled={!amount && !imageUri}
-            style={styles.takePictureButton}
-          />
-
+          <ButtonImageSelector onPictureTaken={setImage} />
+          <Text>Or</Text>
+          <ButtonImagePicker onPictureTaken={setImage} />
           <Button
             disabled={userId === null}
             title="Save payment"

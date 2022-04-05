@@ -8,23 +8,11 @@ const ValidateScreen = () => {
   //get all payments
   //TODO: change the payment value so that we ca get the project name before getting to this screen
   const payments = useSelector((state) => state.payment.allPayments);
-  const projects = useSelector((state) => state.projects.projects);
-  //get the useid from the redux store
-  const userId = useSelector((state) => state.auth.userCredentials.userId);
+  //get check if the user is an admin
+  const isAdmin = useSelector((state) => state.auth.userCredentials.isAdmin);
   const dispatch = useDispatch();
-  // add the project name to every payment using the project id
-  // set a default value for the project name
-  const paymentsWithProjectName = payments.map((payment) => {
-    const project = projects.find(
-      (project) => project.projectId === payment.projectId
-    );
 
-    return {
-      ...payment,
-      projectName: project ? project.projectName : "Pembo",
-    };
-  });
-  if (paymentsWithProjectName.length === 0) {
+  if (payments.length === 0) {
     return (
       <View style={styles.screen}>
         <Text>....Loading</Text>
@@ -40,8 +28,8 @@ const ValidateScreen = () => {
   };
   return (
     <PaymentsGridTile
-      dataList={paymentsWithProjectName}
-      isValidating={userId !== null}
+      dataList={payments}
+      isValidating={isAdmin}
       onValidatePress={validatePayment}
       onRefusePress={rejectPayment}
     />

@@ -5,20 +5,8 @@ import React from "react";
 
 const DetailContributionScreen = ({ navigation }) => {
   const payments = useSelector((state) => state.payment.payments);
-  const projects = useSelector((state) => state.projects.projects);
-  // add the project name to every payment using the project id
-  const paymentsWithProjectName = payments.map((payment) => {
-    const project = projects.find(
-      (project) => project.projectId === payment.projectId
-    );
 
-    return {
-      ...payment,
-      projectName: project ? project.projectName : "Pembo",
-    };
-  });
-
-  return <PaymentsGridTile dataList={paymentsWithProjectName} />;
+  return <PaymentsGridTile dataList={payments} />;
 };
 
 export default DetailContributionScreen;

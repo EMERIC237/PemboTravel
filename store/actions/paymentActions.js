@@ -22,11 +22,12 @@ export const UPDATE_PAYMENT_STATUS = "UPDATE_PAYMENT_STATUS";
  *
  * @param {string} userId
  * @param {string} projectId
+ * @param {string} projectName
  * @param {string} paymentImg
  * @param {string} amount
  * @returns a dispatch function that will be called by the redux thunk and return an action object
  */
-export const addPayment = (userId, projectId, paymentImg, amount) => {
+export const addPayment = (userId,projectName, projectId, paymentImg, amount) => {
   return async (dispatch, getState) => {
     try {
       //get the current project
@@ -36,6 +37,7 @@ export const addPayment = (userId, projectId, paymentImg, amount) => {
       const paymentToAdd = {
         userId,
         projectId,
+        projectName,
         paymentImg,
         amount,
         status: "pending",
