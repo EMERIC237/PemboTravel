@@ -4,7 +4,7 @@ import Colors from "../constants/Colors";
 import { setProjets } from "../store/actions/projectActions";
 import { setPayments } from "../store/actions/paymentActions";
 import { setUser } from "../store/actions/userActions";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { authenticate } from "../store/actions/authActions";
 import { onAuthStateChanged } from "firebase/auth";
