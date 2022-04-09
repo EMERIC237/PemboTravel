@@ -56,57 +56,60 @@ const ProfileScreen = ({ navigation }) => {
       screen: "DetailContribution",
     });
   };
-  if (!userInfos) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.screen}>
-      <View style={styles.infoContainer}>
-        <View style={{ ...styles.infoView, ...styles.picture }}>
-          <Text style={styles.infoText}>
-            Your picture:
-            <Text>{userInfos.picture ? null : "Not picture yet"}</Text>
-          </Text>
+      {userInfos.email ? (
+        <View style={styles.infoContainer}>
+          <View style={{ ...styles.infoView, ...styles.picture }}>
+            <Text style={styles.infoText}>
+              Your picture:
+              <Text>{userInfos.picture ? null : "Not picture yet"}</Text>
+            </Text>
 
-          <View style={styles.imageContainer}>
-            {userInfos.picture ? (
-              <Image
-                source={{
-                  uri: userInfos.picture,
-                }}
-                resizeMethod="resize"
-                resizeMode="center"
-                style={styles.image}
-              />
-            ) : null}
+            <View style={styles.imageContainer}>
+              {userInfos.picture ? (
+                <Image
+                  source={{
+                    uri: userInfos.picture,
+                  }}
+                  resizeMethod="resize"
+                  resizeMode="center"
+                  style={styles.image}
+                />
+              ) : null}
+            </View>
+          </View>
+          <View style={styles.infoView}>
+            <Text style={styles.infoText}>
+              First name: {userInfos.firstName || "No first name yet"}
+            </Text>
+          </View>
+          <View style={styles.infoView}>
+            <Text style={styles.infoText}>
+              Last name: {userInfos.lastName || "No last name yet"}
+            </Text>
+          </View>
+          <View style={styles.infoView}>
+            <Text style={styles.infoText}>
+              Your phone number: {userInfos.phone || "No Phone number yet"}
+            </Text>
+          </View>
+          <View style={styles.infoView}>
+            <Text style={styles.infoText}>
+              Your email: {userInfos.email || "No email yet"}
+            </Text>
           </View>
         </View>
-        <View style={styles.infoView}>
-          <Text style={styles.infoText}>
-            First name: {userInfos.firstName || "No first name yet"}
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text style={{ fontSize: 20 }}>
+            You need to have an account to access your informations here!
           </Text>
         </View>
-        <View style={styles.infoView}>
-          <Text style={styles.infoText}>
-            Last name: {userInfos.lastName || "No last name yet"}
-          </Text>
-        </View>
-        <View style={styles.infoView}>
-          <Text style={styles.infoText}>
-            Your phone number: {userInfos.phone || "No Phone number yet"}
-          </Text>
-        </View>
-        <View style={styles.infoView}>
-          <Text style={styles.infoText}>
-            Your email: {userInfos.email || "No email yet"}
-          </Text>
-        </View>
-      </View>
+      )}
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={onPressPaymentHandler}>
           <Card style={styles.button}>

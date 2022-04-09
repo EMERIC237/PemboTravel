@@ -101,7 +101,6 @@ export function updateInfos(
         `UPDATE infos SET firstName = ?, lastName = ?, email = ?, phone = ?, address = ?, picture = ? WHERE id = ?`,
         [firstName, lastName, email, phone, address, picture, id],
         (_, result) => {
-          console.log(result);
           resolve(result);
         },
         (_, error) => {
