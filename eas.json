@@ -10,7 +10,12 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "realeaseChannel": "prod-v1"
+    },
+    "staging": {
+      "realeaseChannel": "staging-v1"
+    }
   },
   "submit": {
     "production": {}

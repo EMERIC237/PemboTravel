@@ -174,8 +174,8 @@ const AuthScreen = (props) => {
                   setIsSignedUp((prevState) => !prevState);
                 }}
               />
-            </View>
-            <View>
+            </View > 
+            <View style={styles.button}>
               <Button
                 title="Visit our projects"
                 color={Colors.primary}
@@ -210,7 +210,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
+  button: {
+    marginTop: 10,
+  }
 });
 
 export default AuthScreen;

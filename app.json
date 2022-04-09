@@ -6,10 +6,21 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images//splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "name": "expo-image-picker",
+          "expo": true,
+          "photosPermissions": "This app accesses your photos to let you share photos of you payments receipts. You can change this in the app settings.",
+          "cameraPermissions": "This app accesses your camera to let you take photos of you payments receipts. You can change this in the app settings."
+        }
+      ]
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -17,16 +28,31 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "1.0.0",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pembo.travel",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app accesses your photos to let you share photos of you payments receipts. You can change this in the app settings.",
+        "NSCameraUsageDescription": "This app accesses your camera to let you take photos of you payments receipts. You can change this in the app settings."
+      }
     },
     "android": {
+      "versionCode": 1,
+      "package": "com.pembo.travel",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "CAMERA",
+        "CAMERA_ROLL",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/images/icon.png"
+    },
+    "primaryColor": "#4bb84f"
   }
 }

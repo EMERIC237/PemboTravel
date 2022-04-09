@@ -19,9 +19,10 @@ import CreateProjectsScreen from "../screens/CreateProjectsScreen";
 import ValidateScreen from "../screens/ValidateScreen";
 const defaultNavOptions = {
   headerStyle: {
-    backgroundColor: Platform.OS === "android" ? "" : Colors.primary,
+    backgroundColor: Platform.OS === "android" ? "white" : Colors.primary,
   },
   headerTintColor: Platform.OS === "android" ? Colors.primary : "white",
+  headerTitleAlign: "center",
 };
 
 const AdminStack = createNativeStackNavigator();
@@ -50,9 +51,10 @@ const ProjectStackNavigator = () => {
       initialRouteName="Splash"
       screenOptions={({ navigation }) => ({
         headerStyle: {
-          backgroundColor: Platform.OS === "android" ? "" : Colors.primary,
+          backgroundColor: Platform.OS === "android" ? "white" : Colors.primary,
         },
         headerTintColor: Platform.OS === "android" ? Colors.primary : "white",
+        headerTitleAlign: "center",
       })}
     >
       <ProjectStack.Screen
@@ -65,6 +67,7 @@ const ProjectStackNavigator = () => {
         component={AuthScreen}
         options={{
           headerTitle: "Welcome To Pembo Travel!",
+          title: "Welcome To Pembo Travel!",
         }}
       />
       <ProjectStack.Screen
@@ -78,7 +81,11 @@ const ProjectStackNavigator = () => {
                 navigation.toggleDrawer();
               }}
             >
-              <Ionicons name="menu" size={26} color="white" />
+              <Ionicons
+                name="menu"
+                size={26}
+                color={Platform.OS === "android" ? "green" : "white"}
+              />
             </TouchableOpacity>
           ),
           headerRight: () => (
@@ -109,7 +116,11 @@ const ProjectStackNavigator = () => {
                 navigation.goBack();
               }}
             >
-              <Ionicons name="ios-arrow-back" size={25} color="white" />
+              <Ionicons
+                name="ios-arrow-back"
+                size={25}
+                color={Platform.OS === "android" ? "green" : "white"}
+              />
             </TouchableOpacity>
           ),
         })}
@@ -138,10 +149,9 @@ const DrawerNavigator = () => {
       initialRouteName="PemboStack"
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: Colors.primary },
-        headerTintColor: "white",
         drawerActiveBackgroundColor: "#f0e1f0",
         drawerActiveTintColor: "#3c0f0f",
+        ...defaultNavOptions,
       }}
     >
       <AppDrawer.Screen
@@ -164,12 +174,6 @@ const DrawerNavigator = () => {
           drawerIcon: ({ color, size }) => (
             <Ionicons name="person" color={color} size={size} />
           ),
-          // headerTitle: "Pembo Projects",
-          // headerRight: () => (
-          //   <Text style={{ color: "white", fontWeight: "600", fontSize: 15 }}>
-          //     My Projects
-          //   </Text>
-          // ),
         }}
       />
     </AppDrawer.Navigator>
@@ -196,7 +200,11 @@ const PaymentStackNavigator = () => {
                 navigation.goBack();
               }}
             >
-              <Ionicons name="ios-arrow-back" size={25} color="white" />
+              <Ionicons
+                name="ios-arrow-back"
+                size={25}
+                color={Platform.OS === "android" ? "green" : "white"}
+              />
             </TouchableOpacity>
           ),
         })}
