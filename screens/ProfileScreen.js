@@ -56,7 +56,7 @@ const ProfileScreen = ({ navigation }) => {
       screen: "DetailContribution",
     });
   };
-
+  console.log({ userInfos });
   return (
     <View style={styles.screen}>
       {userInfos.email ? (

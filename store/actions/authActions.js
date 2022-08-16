@@ -28,7 +28,6 @@ export const signup = (
   firstName,
   phone,
   userImg,
-  projectId
 ) => {
   return async (dispacth) => {
     try {

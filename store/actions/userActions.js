@@ -20,8 +20,13 @@ export const makeAdmin = (userEmail) => {
   };
 };
 
+/**
+ * this set the user infos in the redux store
+ * @returns {Promise}
+ */
 export const setUser = () => {
   return async (dispatch, getState) => {
+    let userPicture = "";
     try {
       let userInfos = {};
       // get the user id
@@ -36,6 +41,11 @@ export const setUser = () => {
       if (querySnapshot.exists()) {
         userInfos = querySnapshot.data();
       }
+      if (userInfos.picture) {
+        userPicture = userInfos.picture;
+      } else if (userInfos.userImg) {
+        userPicture = userInfos.userImg;
+      }
       dispatch({
         type: SET_USER,
         payload: {
@@ -44,7 +54,7 @@ export const setUser = () => {
           lastName: userInfos.lastName ? userInfos.lastName : "",
           email: userInfos.email ? userInfos.email : "",
           phone: userInfos.phone ? userInfos.phone : "",
-          picture: userInfos.picture ? userInfos.picture : "",
+          picture: userPicture,
         },
       });
     } catch (error) {

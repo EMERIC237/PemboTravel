@@ -14,3 +14,7 @@ web-build/
 .DS_Store
 #environement
 .env
+
+# Vscode
+.vscode/
+.history/
