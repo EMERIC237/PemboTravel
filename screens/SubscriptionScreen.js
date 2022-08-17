@@ -11,6 +11,7 @@ import {
   Button,
   Image,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useReducer, useCallback } from "react";
 import ButtonImagePicker from "../components/extends/ButtonImagePicker";
@@ -109,10 +110,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
     [dispatchFormState]
   );
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <KeyboardAwareScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View>
@@ -189,7 +187,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
         </ScrollView>
       </TouchableWithoutFeedback>
       <Button title="Save" onPress={submitHandler} />
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -202,4 +200,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: { width: 200, height: 200 },
+  contentContainer: {
+    paddingVertical: 10,
+  },
 });

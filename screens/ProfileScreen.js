@@ -92,12 +92,12 @@ const ProfileScreen = ({ navigation }) => {
           </View>
           <View style={styles.infoView}>
             <Text style={styles.infoText}>
-              Your phone number: {userInfos.phone || "No Phone number yet"}
+              phone number: {userInfos.phone || "No Phone number yet"}
             </Text>
           </View>
           <View style={styles.infoView}>
             <Text style={styles.infoText}>
-              Your email: {userInfos.email || "No email yet"}
+              Email: {userInfos.email || "No email yet"}
             </Text>
           </View>
         </View>
