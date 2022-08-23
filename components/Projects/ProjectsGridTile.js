@@ -46,11 +46,11 @@ export default ProjectsGridTile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   projectItem: {
     padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
     width: 350,

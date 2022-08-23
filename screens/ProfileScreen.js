@@ -5,7 +5,9 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  ScrollView,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/actions/authActions";
@@ -58,78 +60,80 @@ const ProfileScreen = ({ navigation }) => {
   };
   console.log({ userInfos });
   return (
-    <View style={styles.screen}>
-      {userInfos.email ? (
-        <View style={styles.infoContainer}>
-          <View style={{ ...styles.infoView, ...styles.picture }}>
-            <Text style={styles.infoText}>
-              Your picture:
-              <Text>{userInfos.picture ? null : "Not picture yet"}</Text>
-            </Text>
+    <SafeAreaView style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.screenView}>
+        {userInfos.email ? (
+          <View style={styles.infoContainer}>
+            <View style={{ ...styles.infoView, ...styles.picture }}>
+              <Text style={styles.infoText}>
+                Your picture:
+                <Text>{userInfos.picture ? null : "Not picture yet"}</Text>
+              </Text>
 
-            <View style={styles.imageContainer}>
-              {userInfos.picture ? (
-                <Image
-                  source={{
-                    uri: userInfos.picture,
-                  }}
-                  resizeMethod="resize"
-                  resizeMode="center"
-                  style={styles.image}
-                />
-              ) : null}
+              <View style={styles.imageContainer}>
+                {userInfos.picture ? (
+                  <Image
+                    source={{
+                      uri: userInfos.picture,
+                    }}
+                    resizeMethod="resize"
+                    resizeMode="center"
+                    style={styles.image}
+                  />
+                ) : null}
+              </View>
+            </View>
+            <View style={styles.infoView}>
+              <Text style={styles.infoText}>
+                First name: {userInfos.firstName || "No first name yet"}
+              </Text>
+            </View>
+            <View style={styles.infoView}>
+              <Text style={styles.infoText}>
+                Last name: {userInfos.lastName || "No last name yet"}
+              </Text>
+            </View>
+            <View style={styles.infoView}>
+              <Text style={styles.infoText}>
+                phone number: {userInfos.phone || "No Phone number yet"}
+              </Text>
+            </View>
+            <View style={styles.infoView}>
+              <Text style={styles.infoText}>
+                Email: {userInfos.email || "No email yet"}
+              </Text>
             </View>
           </View>
-          <View style={styles.infoView}>
-            <Text style={styles.infoText}>
-              First name: {userInfos.firstName || "No first name yet"}
+        ) : (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{ fontSize: 20 }}>
+              You need to have an account to access your informations here!
             </Text>
           </View>
-          <View style={styles.infoView}>
-            <Text style={styles.infoText}>
-              Last name: {userInfos.lastName || "No last name yet"}
-            </Text>
-          </View>
-          <View style={styles.infoView}>
-            <Text style={styles.infoText}>
-              phone number: {userInfos.phone || "No Phone number yet"}
-            </Text>
-          </View>
-          <View style={styles.infoView}>
-            <Text style={styles.infoText}>
-              Email: {userInfos.email || "No email yet"}
-            </Text>
-          </View>
+        )}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onPressPaymentHandler}>
+            <Card style={styles.button}>
+              <Text style={styles.buttonText}>See your payments Here</Text>
+            </Card>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPressUpdateHandler}>
+            <Card style={styles.button}>
+              <Text style={styles.buttonText}>Change my informations</Text>
+            </Card>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onLogoutHandler}>
+            <Card style={styles.button}>
+              <Text style={styles.buttonText}>
+                {userId ? "Logout" : "Login or Sign up here "}
+              </Text>
+            </Card>
+          </TouchableOpacity>
         </View>
-      ) : (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text style={{ fontSize: 20 }}>
-            You need to have an account to access your informations here!
-          </Text>
-        </View>
-      )}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onPressPaymentHandler}>
-          <Card style={styles.button}>
-            <Text style={styles.buttonText}>See your payments Here</Text>
-          </Card>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressUpdateHandler}>
-          <Card style={styles.button}>
-            <Text style={styles.buttonText}>Change my informations</Text>
-          </Card>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onLogoutHandler}>
-          <Card style={styles.button}>
-            <Text style={styles.buttonText}>
-              {userId ? "Logout" : "Login or Sign up here "}
-            </Text>
-          </Card>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -138,8 +142,9 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
+  },
+  screenView: {
+    marginHorizontal: 5,
   },
   infoContainer: {
     backgroundColor: "white",
@@ -166,15 +171,17 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   buttonContainer: {
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
     flex: 1,
+    backgroundColor: "#e1dfe6",
   },
   button: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#348ceb",
     padding: 10,
+    marginVertical: 10,
   },
   buttonText: {
     color: "white",

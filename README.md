@@ -21,3 +21,6 @@ emerictouolac@gmail.com -->(password) --> 12345qwerty
 
 -- issues to be fixed
 1. the variable 'userImg' and 'picture' refer to the same value but name difference across the application can cause bugs
+2. <input.js>, line 90-95, the phone number props from the text input is not optimal since it is call on every key stroke.(optimize it for changing value on end blur or endediting event only)
+3. Add country code to the user values
+4. Manage loading states on the redux store

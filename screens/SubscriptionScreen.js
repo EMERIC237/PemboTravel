@@ -65,6 +65,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
     formIsValid: infos ? true : false,
   });
   const submitHandler = useCallback(async () => {
+    // console.log({ formState });
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the erros in the form.", [
         { text: "Okay" },
@@ -97,7 +98,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
       )
     );
     navigation.navigate("Projects");
-  });
+  }, [dispatch, formState, infos, image, projectId]);
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
@@ -116,7 +117,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
           <View>
             <Input
               id="firstName"
-              label="firstName"
+              label="firstName :"
               errorText="Please enter a valid name"
               keyboardType="default"
               autoCapitalize="sentences"
@@ -128,7 +129,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
             />
             <Input
               id="lastName"
-              label="lastName"
+              label="lastName :"
               errorText="Please enter a valid name"
               keyboardType="default"
               autoCapitalize="sentences"
@@ -140,17 +141,18 @@ const SubscriptionScreen = ({ route, navigation }) => {
             />
             <Input
               id="phone"
-              label="Phone number"
+              label="Phone number :"
               errorText="Please enter a valid number"
               keyboardType="phone-pad"
               returnKeyType="next"
               onInputChange={inputChangeHandler}
               initialValue={infos ? infos.phone : ""}
               initiallyValid={!!infos}
+              isNumberInput={true}
             />
             <Input
               id="email"
-              label="E-mail"
+              label="E-mail :"
               errorText="Please enter a valid email"
               keyboardType="email-address"
               autoCorrect
@@ -163,7 +165,7 @@ const SubscriptionScreen = ({ route, navigation }) => {
             />
             <Input
               id="password"
-              label="Password"
+              label="Password :"
               errorText="Please enter a valid password"
               keyboardType="default"
               autoCorrect

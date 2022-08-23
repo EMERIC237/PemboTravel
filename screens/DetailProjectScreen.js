@@ -1,6 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { StyleSheet, Text, View, Image, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import Colors from "../constants/Colors";
 
 const DetailProjectScreen = ({ route, navigation }) => {
@@ -44,20 +52,22 @@ const DetailProjectScreen = ({ route, navigation }) => {
   }
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: selectedProject.projectImg }}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{selectedProject.projectName}</Text>
-        <Text style={styles.text}>Price: {selectedProject.price}</Text>
-        <Text style={styles.text}>{selectedProject.description}</Text>
-      </View>
-      <View style={styles.buttonContainer}>{ShowedButton}</View>
-    </View>
+    <SafeAreaView style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.screenView}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: selectedProject.projectImg }}
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{selectedProject.projectName}</Text>
+          <Text style={styles.text}>Price: {selectedProject.price}</Text>
+          <Text style={styles.text}>{selectedProject.description}</Text>
+        </View>
+        <View style={styles.buttonContainer}>{ShowedButton}</View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -66,7 +76,10 @@ export default DetailProjectScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "flex-start",
+  },
+  screenView: {
+    marginHorizontal: 10,
+    marginVertical: 1,
   },
   imageContainer: {
     width: "100%",
@@ -89,5 +102,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
+    marginVertical: 5,
   },
 });
